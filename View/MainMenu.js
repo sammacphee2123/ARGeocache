@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
-import { useAuth } from "../providers/AuthProvider.js";
-import { Alert } from "react-native";
+import React from 'react';
+import {useAuth} from '../providers/AuthProvider.js';
+import {Alert} from 'react-native';
 import {
   SafeAreaView,
   View,
@@ -13,20 +13,19 @@ import {useNavigation} from '@react-navigation/native';
 
 export default function MainMenu({route}) {
   const navigation = useNavigation();
-  const { username } = route.params;
-  const [password, setPassword] = useState('');
-  const { user, signOut } = useAuth();
+  const {username} = route.params;
+  const {signOut} = useAuth();
   const onPressSignOut = async () => {
-        console.log("Press sign out");
-        console.log(username);
-        try {
-          await signOut(username, password);
-          navigation.navigate('HomeScreen');
-        } catch (error) {
-          console.log("Failed to sign out");
-          Alert.alert(`Failed to sign in: ${error.message}`);
-        }
-    };
+    console.log('Press sign out');
+    console.log(username);
+    try {
+      await signOut();
+      navigation.navigate('HomeScreen');
+    } catch (error) {
+      console.log('Failed to sign out');
+      Alert.alert(`Failed to sign in: ${error.message}`);
+    }
+  };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffff'}}>
@@ -51,7 +50,7 @@ export default function MainMenu({route}) {
         <TouchableOpacity
           style={styles.ProfileStyle}
           activeOpacity={0.5}
-          onPress={() => navigation.navigate('Profile')}>
+          onPress={() => navigation.navigate('Profile', {username})}>
           <Image
             source={require('../components/Profile.png')}
             style={styles.ImageIconStyle}
@@ -62,7 +61,7 @@ export default function MainMenu({route}) {
         <TouchableOpacity
           style={styles.MapStyle}
           activeOpacity={0.5}
-          onPress={() => navigation.navigate('Geocaching', {username: username})}>
+          onPress={() => navigation.navigate('Geocaching', {username})}>
           <Image
             source={require('../components/Map.png')}
             style={styles.ImageIconStyle}

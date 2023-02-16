@@ -2,14 +2,10 @@ import React, {useState, useEffect} from 'react';
 import MapView from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
-import RNLocation from 'react-native-location';
 import {useNavigation} from '@react-navigation/native';
-import Realm, {User} from 'realm';
-import app from '../realmApp';
 import {useAuth} from '../providers/AuthProvider';
-import { Alert } from "react-native";
+import {Alert} from 'react-native';
 import {
-  SafeAreaView,
   View,
   Text,
   StyleSheet,
@@ -23,17 +19,14 @@ export default function Geocaching({route}) {
   LogBox.ignoreAllLogs();
   const navigation = useNavigation();
   const {user} = useAuth();
-  const { username } = route.params;
+  const {username} = route.params;
   const [currentLongitude, setCurrentLongitude] = useState(-66.64159932959872);
   const [currentLatitude, setCurrentLatitude] = useState(45.94995093187056);
   const [locationStatus, setLocationStatus] = useState('');
   const [geocacheList, setGeocacheList] = useState([]);
   const [geocacheID, setGeocacheID] = useState('');
-  const [geoLong, setGeoLong] = useState(0);
-  const [geoLat, setGeoLat] = useState(0);
-  watchID: number = null;
+  let watchID = null;
   useEffect(() => {
-
     const requestLocationPermission = async () => {
       try {
         const granted = await PermissionsAndroid.request(
@@ -56,10 +49,10 @@ export default function Geocaching({route}) {
     };
     const getCoordinates = async () => {
       try {
-         const geocacheList = await user.functions.getGeocacheCoordinates();
-         setGeocacheList(geocacheList);
+        const geocacheList = await user.functions.getGeocacheCoordinates();
+        setGeocacheList(geocacheList);
       } catch (err) {
-         console.warn(err);
+        console.warn(err);
       }
     };
     requestLocationPermission();
@@ -70,26 +63,25 @@ export default function Geocaching({route}) {
   }, []);
 
   useEffect(() => {
-     const pickupGeocache = async () => {
-        //if(Math.sqrt(Math.pow(currentLatitude-geoLat ,2) +Math.pow(currentLongitude-geoLong,2) ) <= 0.001){
-        try{
-            console.log("picking up geocache");
-            console.log(username);
-            console.log(geocacheID);
-            await user.functions.pickUpGeocache(username, geocacheID);
-            await user.functions.updateGeocache(geocacheID, 0, 0);
-            Alert.alert("Geocache collected!");
-        } catch (err) {
-            console.warn(err);
-        }
-              //}
-              //else{
-              //    Alert.alert("Not in range of geocache");
-              //}
-     }
-     pickupGeocache();
+    const pickupGeocache = async () => {
+      //if(Math.sqrt(Math.pow(currentLatitude-geoLat ,2) +Math.pow(currentLongitude-geoLong,2) ) <= 0.001){
+      try {
+        console.log('picking up geocache');
+        console.log(username);
+        console.log(geocacheID);
+        await user.functions.pickUpGeocache(username, geocacheID);
+        await user.functions.updateGeocache(geocacheID, 0, 0);
+        Alert.alert('Geocache collected!');
+      } catch (err) {
+        console.warn(err);
+      }
+      //}
+      //else{
+      //    Alert.alert("Not in range of geocache");
+      //}
+    };
+    pickupGeocache();
   }, [geocacheID]);
-
 
   const getOneTimeLocation = () => {
     setLocationStatus('Getting Location ...');
@@ -129,7 +121,8 @@ export default function Geocaching({route}) {
   return (
     <View style={styles.body}>
       <View style={styles.viewStyle}>
-        <TouchableOpacity onPress={() => navigation.navigate('MainMenu', {username: username})}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('MainMenu', {username: username})}>
           <Image
             source={require('../components/back.png')}
             style={{width: 35, height: 35, marginLeft: 2}}
@@ -146,29 +139,28 @@ export default function Geocaching({route}) {
           longitudeDelta: 0.0421,
         }}
         showsUserLocation={true}>
-        {geocacheList.map((item) => {
-        return(
+        {geocacheList.map(item => {
+          return (
             <Marker
-                key={item.name}
-                title={item.name}
-                coordinate={{
-                    latitude: item.coordinate.latitude,
-                    longitude: item.coordinate.longitude,
-                }}
-                onPress={() => {
-                    console.log(item.geocache_id);
-                    setGeocacheID(item.geocache_id);
-                }}
+              key={item.name}
+              title={item.name}
+              coordinate={{
+                latitude: item.coordinate.latitude,
+                longitude: item.coordinate.longitude,
+              }}
+              onPress={() => {
+                console.log(item.geocache_id);
+                setGeocacheID(item.geocache_id);
+              }}
             />
-            )
+          );
         })}
       </MapView>
       <View style={styles.buttonCallout}>
         <TouchableOpacity
-            style={[styles.touchable]}
-            onPress={() => console.log("press")}
-            >
-            <Text style={styles.touchableText}>Place Geocache</Text>
+          style={[styles.touchable]}
+          onPress={() => console.log('press')}>
+          <Text style={styles.touchableText}>Place Geocache</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -193,30 +185,30 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   ImageIconStyle: {
-      flex: 1,
-      padding: 15,
-      margin: 5,
-      height: 25,
-      width: 25,
-      resizeMode: 'stretch',
-    },
-     buttonCallout: {
-         flex: 1,
-         flexDirection:'row',
-         position:'absolute',
-         bottom:10,
-         alignSelf: "center",
-         justifyContent: "space-between",
-         backgroundColor: "transparent",
-         borderWidth: 0.5,
-         borderRadius: 20
-       },
-      touchable: {
-        backgroundColor: "lightblue",
-        padding: 10,
-        margin: 10
-      },
-      touchableText: {
-        fontSize: 24
-      },
+    flex: 1,
+    padding: 15,
+    margin: 5,
+    height: 25,
+    width: 25,
+    resizeMode: 'stretch',
+  },
+  buttonCallout: {
+    flex: 1,
+    flexDirection: 'row',
+    position: 'absolute',
+    bottom: 10,
+    alignSelf: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'transparent',
+    borderWidth: 0.5,
+    borderRadius: 20,
+  },
+  touchable: {
+    backgroundColor: 'lightblue',
+    padding: 10,
+    margin: 10,
+  },
+  touchableText: {
+    fontSize: 24,
+  },
 });

@@ -4,26 +4,28 @@ import {
   StyleSheet,
   Text,
   Image,
-  Button,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-export default function Profile() {
+export default function Profile({route}) {
   const navigation = useNavigation();
+  const {username} = route.params;
+  console.log('hello');
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffff'}}>
       <View style={styles.viewStyle}>
-        <TouchableOpacity onPress={() => navigation.navigate('MainMenu', {username: username})}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('MainMenu', {username})}>
           <Image
             source={require('../components/back.png')}
             style={{width: 35, height: 35, marginLeft: 2}}
           />
         </TouchableOpacity>
         <Text style={styles.textStyle}>User Profile</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('EditProfile', {username})}>
           <Image
             source={require('../components/edit.png')}
             style={{flex: 0.8, marginRight: 10}}

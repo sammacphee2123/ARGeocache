@@ -1,49 +1,49 @@
 import React, {useState} from 'react';
+import {useAuth} from '../providers/AuthProvider';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  useColorScheme,
   Image,
   View,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import CheckBox from '@react-native-community/checkbox';
 
-export default function EditProfile() {
-  const [username, setNewUsername] = useState('');
+export default function EditProfile({route}) {
+  const [username, setNewUsername] = useState(route.params.username);
   const [password, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isSelected, setSelection] = useState(false);
   const navigation = useNavigation();
+  const {user} = useAuth();
 
-  const onPressSignUp = async () => {
+  const onPressUpdateProfile = async () => {
     try {
-        if(password === confirmPassword){
-            if(password.length > 7){
-                await user.functions.updateProfile(username, password, isSelected);
-                navigation.navigate('MainMenu');
-                alert('Profile successfully updated');
-            }
-            else{
-                Alert.alert('Password must be at least 8 characters long');
-            }
+      if (password === confirmPassword) {
+        if (password.length > 7) {
+          await user.functions.updateProfile(username, password, isSelected);
+          navigation.navigate('MainMenu', {username: route.params.username});
+          alert('Profile successfully updated');
+        } else {
+          Alert.alert('Password must be at least 8 characters long');
         }
-        else{
-            Alert.alert('Passwords do not match, please try again');
-        }
+      } else {
+        Alert.alert('Passwords do not match, please try again');
+      }
     } catch (error) {
-        Alert.alert(`Failed to sign up: ${error.message}`);
+      Alert.alert(`Failed to sign up: ${error.message}`);
     }
   };
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffff'}}>
       <View style={styles.viewStyle}>
-        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('Profile', {username: route.params.username})
+          }>
           <Image
             source={require('../components/back.png')}
             style={{width: 35, height: 35, marginLeft: 2}}
@@ -93,27 +93,32 @@ export default function EditProfile() {
         </View>
 
         <View style={styles.checkboxContainer}>
-            <Text style={styles.label}>Would you like your account to be private?</Text>
-                <CheckBox
-                        value={isSelected}
-                        onValueChange={setSelection}
-                        style={styles.checkbox}
-                />
+          <Text style={styles.label}>
+            Would you like your account to be private?
+          </Text>
+          <CheckBox
+            value={isSelected}
+            onValueChange={setSelection}
+            style={styles.checkbox}
+          />
         </View>
 
         <TouchableOpacity
           style={styles.SaveButton}
           onPress={() => {
+            onPressUpdateProfile();
             alert('Changes Saved');
           }}>
           <Text style={{fontWeight: 'bold', color: 'black'}}>Save</Text>
         </TouchableOpacity>
         <TouchableOpacity
-            style={styles.DeleteButton}
-            onPress={() => {
-                alert('Changes Saved');
-            }}>
-            <Text style={{fontWeight: 'bold', color: 'black'}}>Delete Account</Text>
+          style={styles.DeleteButton}
+          onPress={() => {
+            alert('Changes Saved');
+          }}>
+          <Text style={{fontWeight: 'bold', color: 'black'}}>
+            Delete Account
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -149,12 +154,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   DeleteButton: {
-      width: '40%',
-      height: 30,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#cc0000',
-      marginBottom: 20,
+    width: '40%',
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#cc0000',
+    marginBottom: 20,
   },
   textStyle: {
     fontSize: 25,
@@ -172,10 +177,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   checkboxContainer: {
-    flexDirection: "column",
+    flexDirection: 'column',
     marginBottom: 20,
   },
   checkbox: {
-    alignSelf: "center",
+    alignSelf: 'center',
   },
 });

@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-import { useAuth } from "../providers/AuthProvider.js";
+import React from 'react';
 import {
   SafeAreaView,
   View,
@@ -12,9 +11,6 @@ import {useNavigation} from '@react-navigation/native';
 
 export default function HomeScreen() {
   const navigation = useNavigation();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const { user, signOut } = useAuth();
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffff'}}>
       <View style={styles.viewStyle}>
@@ -22,7 +18,10 @@ export default function HomeScreen() {
       </View>
 
       <View style={styles.container}>
-        <Image source={require('../components/WelcomeIcon.png')} style={styles.image}/>
+        <Image
+          source={require('../components/WelcomeIcon.png')}
+          style={styles.image}
+        />
 
         <TouchableOpacity
           style={styles.LoginButton}
@@ -65,12 +64,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#2AAA8A',
     marginTop: 10,
   },
-  
+
   image: {
-   flex: 0.75,
-   width: 400,
-   height: 400,
-   resizeMode: 'contain',
+    flex: 0.75,
+    width: 400,
+    height: 400,
+    resizeMode: 'contain',
   },
 
   textStyle: {
@@ -81,11 +80,11 @@ const styles = StyleSheet.create({
     marginLeft: 100,
   },
   ImageIconStyle: {
-      padding: 15,
-      margin: 5,
-      height: 250,
-      width: 250,
-      resizeMode: 'stretch',
+    padding: 15,
+    margin: 5,
+    height: 250,
+    width: 250,
+    resizeMode: 'stretch',
   },
 
   viewStyle: {

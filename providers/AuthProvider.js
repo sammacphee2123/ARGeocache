@@ -1,13 +1,11 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
-import Realm from "realm";
-import app from "../realmApp";
+import React, {useContext, useState, useEffect, useRef} from 'react';
+import Realm from 'realm';
+import app from '../realmApp';
 
 const AuthContext = React.createContext(null);
 
-const AuthProvider = ({ children }) => {
+const AuthProvider = ({children}) => {
   const [user, setUser] = useState(app.currentUser);
-  const [username, setUsername] = useState('');
-  //const [userGeocaches, setGeocaches] = useState([]);
   const realmRef = useRef(null);
 
   useEffect(() => {
@@ -22,10 +20,8 @@ const AuthProvider = ({ children }) => {
       },
     };
 
-    Realm.open(config).then((userRealm) => {
+    Realm.open(config).then(userRealm => {
       realmRef.current = userRealm;
-      const users = userRealm.objects("Users");
-
     });
 
     return () => {
@@ -33,7 +29,6 @@ const AuthProvider = ({ children }) => {
       if (userRealm) {
         userRealm.close();
         realmRef.current = null;
-      //  setGeocaches([]);
       }
     };
   }, [user]);
@@ -42,14 +37,13 @@ const AuthProvider = ({ children }) => {
     const creds = Realm.Credentials.emailPassword(email, password);
     const newUser = await app.logIn(creds);
     setUser(newUser);
-    setUsername(newUser.username);
   };
 
   const signUp = async (email, password) => {
-    await app.emailPasswordAuth.registerUser({ email, password });
+    await app.emailPasswordAuth.registerUser({email, password});
   };
 
-  const signOut = async (email, password) => {
+  const signOut = async () => {
     if (user == null) {
       console.warn("Not logged in, can't log out!");
       return;
@@ -58,15 +52,6 @@ const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  //const deleteAccount = async
-
-  //const updatePrivacy = async (username, privacy) => {
-  //  realm.write(() => {
-  //      user.privacy = privacy;
-  //  }
-  //  console.log('User')
-  //}
-
   return (
     <AuthContext.Provider
       value={{
@@ -74,9 +59,7 @@ const AuthProvider = ({ children }) => {
         signIn,
         signOut,
         user,
-        //userGeocaches,
-      }}
-    >
+      }}>
       {children}
     </AuthContext.Provider>
   );
@@ -85,9 +68,9 @@ const AuthProvider = ({ children }) => {
 const useAuth = () => {
   const auth = useContext(AuthContext);
   if (auth == null) {
-    throw new Error("useAuth() called outside of a AuthProvider");
+    throw new Error('useAuth() called outside of a AuthProvider');
   }
   return auth;
 };
 
-export { AuthProvider, useAuth };
+export {AuthProvider, useAuth};

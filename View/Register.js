@@ -1,22 +1,15 @@
 import React, {useState} from 'react';
-import { useAuth } from "../providers/AuthProvider";
-import { Alert } from "react-native";
-import Realm from "realm";
-import app from "../realmApp";
+import {useAuth} from '../providers/AuthProvider';
+import {Alert} from 'react-native';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TextInput,
   Image,
-  Button,
   TouchableOpacity,
-  useColorScheme,
   View,
 } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
 import {useNavigation} from '@react-navigation/native';
 
 export default function Register() {
@@ -25,28 +18,26 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const navigation = useNavigation();
-  const { user, signUp, signIn } = useAuth();
+  const {user, signUp, signIn} = useAuth();
 
   const onPressSignUp = async () => {
-      try {
-        if(password === confirmPassword){
-            if(password.length > 7){
-                await signUp(username, password);
-                signIn(username, password);
-                await user.functions.insertUser(username, password);
-                navigation.navigate('MainMenu');
-                alert('New Profile Created, you are now signed in');
-            }
-            else{
-                Alert.alert('Password must be at least 8 characters long');
-            }
+    try {
+      if (password === confirmPassword) {
+        if (password.length > 7) {
+          await signUp(username, password);
+          signIn(username, password);
+          await user.functions.insertUser(username, password);
+          navigation.navigate('MainMenu');
+          alert('New Profile Created, you are now signed in');
+        } else {
+          Alert.alert('Password must be at least 8 characters long');
         }
-        else{
-            Alert.alert('Passwords do not match, please try again');
-        }
-      } catch (error) {
-        Alert.alert(`Failed to sign up: ${error.message}`);
+      } else {
+        Alert.alert('Passwords do not match, please try again');
       }
+    } catch (error) {
+      Alert.alert(`Failed to sign up: ${error.message}`);
+    }
   };
 
   return (
@@ -87,13 +78,13 @@ export default function Register() {
             placeholder="Confirm Password"
             placeholderTextColor="#003f5c"
             secureTextEntry={true}
-            onChangeText={confirmPassword =>setConfirmPassword(confirmPassword)}
+            onChangeText={confirmPassword =>
+              setConfirmPassword(confirmPassword)
+            }
           />
         </View>
 
-        <TouchableOpacity
-          style={styles.SubmitButton}
-          onPress={onPressSignUp}>
+        <TouchableOpacity style={styles.SubmitButton} onPress={onPressSignUp}>
           <Text style={{fontWeight: 'bold', color: 'black'}}>Submit</Text>
         </TouchableOpacity>
       </View>
