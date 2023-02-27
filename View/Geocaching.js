@@ -121,8 +121,7 @@ export default function Geocaching({route}) {
   return (
     <View style={styles.body}>
       <View style={styles.viewStyle}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('MainMenu', {username: username})}>
+        <TouchableOpacity onPress={navigation.goBack}>
           <Image
             source={require('../components/back.png')}
             style={{width: 35, height: 35, marginLeft: 2}}

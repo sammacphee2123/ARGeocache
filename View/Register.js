@@ -43,7 +43,7 @@ export default function Register() {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffff'}}>
       <View style={styles.viewStyle}>
-        <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}>
+        <TouchableOpacity onPress={navigation.goBack}>
           <Image
             source={require('../components/back.png')}
             style={{width: 35, height: 35, marginLeft: 2}}

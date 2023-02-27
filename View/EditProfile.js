@@ -40,10 +40,7 @@ export default function EditProfile({route}) {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffff'}}>
       <View style={styles.viewStyle}>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('Profile', {username: route.params.username})
-          }>
+        <TouchableOpacity onPress={navigation.goBack}>
           <Image
             source={require('../components/back.png')}
             style={{width: 35, height: 35, marginLeft: 2}}
