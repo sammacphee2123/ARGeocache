@@ -19,7 +19,7 @@ export default function HomeScreen() {
 
       <View style={styles.container}>
         <Image
-          source={require('../components/WelcomeIcon.png')}
+          source={require('../../data/images/WelcomeIcon.png')}
           style={styles.image}
         />
 

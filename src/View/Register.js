@@ -1,32 +1,34 @@
 import React, {useState} from 'react';
 import {useAuth} from '../providers/AuthProvider';
+import {Alert} from 'react-native';
 import {
   SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   Image,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import CheckBox from '@react-native-community/checkbox';
 
-export default function EditProfile({route}) {
-  const [username, setNewUsername] = useState(route.params.username);
-  const [password, setNewPassword] = useState('');
+export default function Register() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [isSelected, setSelection] = useState(false);
-  const navigation = useNavigation();
-  const {user} = useAuth();
 
-  const onPressUpdateProfile = async () => {
+  const navigation = useNavigation();
+  const {user, signUp, signIn} = useAuth();
+
+  const onPressSignUp = async () => {
     try {
       if (password === confirmPassword) {
         if (password.length > 7) {
-          await user.functions.updateProfile(username, password, isSelected);
-          navigation.navigate('MainMenu', {username: route.params.username});
-          alert('Profile successfully updated');
+          await signUp(username, password);
+          signIn(username, password);
+          await user.functions.insertUser(username, password);
+          navigation.navigate('MainMenu');
+          alert('New Profile Created, you are now signed in');
         } else {
           Alert.alert('Password must be at least 8 characters long');
         }
@@ -37,50 +39,43 @@ export default function EditProfile({route}) {
       Alert.alert(`Failed to sign up: ${error.message}`);
     }
   };
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffff'}}>
       <View style={styles.viewStyle}>
         <TouchableOpacity onPress={navigation.goBack}>
           <Image
-            source={require('../components/back.png')}
+            source={require('../../data/images/back.png')}
             style={{width: 35, height: 35, marginLeft: 2}}
           />
         </TouchableOpacity>
-        <Text style={styles.textStyle}>Edit Profile</Text>
-      </View>
-      <View style={styles.container}>
-        <TouchableOpacity
-          onPress={() => {
-            alert('Open Camera');
-          }}>
-          <Image source={require('../components/CameraButton.png')} />
-        </TouchableOpacity>
+        <Text style={styles.textStyle}>Create Your Profile</Text>
       </View>
 
       <View style={styles.container}>
         <View style={styles.inputView}>
           <TextInput
             style={styles.TextInput}
-            placeholder="New Username"
+            placeholder="Username"
             placeholderTextColor="#003f5c"
-            onChangeText={username => setNewUsername(username)}
+            onChangeText={username => setUsername(username)}
           />
         </View>
 
         <View style={styles.inputView}>
           <TextInput
             style={styles.TextInput}
-            placeholder="New Password"
+            placeholder="Password"
             placeholderTextColor="#003f5c"
             secureTextEntry={true}
-            onChangeText={password => setNewPassword(password)}
+            onChangeText={password => setPassword(password)}
           />
         </View>
 
         <View style={styles.inputView}>
           <TextInput
             style={styles.TextInput}
-            placeholder="Confirm New Password"
+            placeholder="Confirm Password"
             placeholderTextColor="#003f5c"
             secureTextEntry={true}
             onChangeText={confirmPassword =>
@@ -89,33 +84,8 @@ export default function EditProfile({route}) {
           />
         </View>
 
-        <View style={styles.checkboxContainer}>
-          <Text style={styles.label}>
-            Would you like your account to be private?
-          </Text>
-          <CheckBox
-            value={isSelected}
-            onValueChange={setSelection}
-            style={styles.checkbox}
-          />
-        </View>
-
-        <TouchableOpacity
-          style={styles.SaveButton}
-          onPress={() => {
-            onPressUpdateProfile();
-            alert('Changes Saved');
-          }}>
-          <Text style={{fontWeight: 'bold', color: 'black'}}>Save</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.DeleteButton}
-          onPress={() => {
-            alert('Changes Saved');
-          }}>
-          <Text style={{fontWeight: 'bold', color: 'black'}}>
-            Delete Account
-          </Text>
+        <TouchableOpacity style={styles.SubmitButton} onPress={onPressSignUp}>
+          <Text style={{fontWeight: 'bold', color: 'black'}}>Submit</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -125,8 +95,9 @@ export default function EditProfile({route}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
     alignItems: 'center',
-    marginTop: 30,
+    marginTop: 300,
   },
   inputView: {
     backgroundColor: '#96DED1',
@@ -142,21 +113,12 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 
-  SaveButton: {
+  SubmitButton: {
     width: '40%',
     height: 30,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#2AAA8A',
-    marginBottom: 20,
-  },
-  DeleteButton: {
-    width: '40%',
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#cc0000',
-    marginBottom: 20,
   },
   textStyle: {
     fontSize: 25,
@@ -172,12 +134,5 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  checkboxContainer: {
-    flexDirection: 'column',
-    marginBottom: 20,
-  },
-  checkbox: {
-    alignSelf: 'center',
   },
 });

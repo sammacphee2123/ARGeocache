@@ -38,7 +38,7 @@ export default function MainMenu({route}) {
 
       <View style={styles.CameraContainer}>
         <Image
-          source={require('../components/WelcomeIcon.png')}
+          source={require('../../data/images/WelcomeIcon.png')}
           style={{
             height: 225,
             width: 225,
@@ -52,7 +52,7 @@ export default function MainMenu({route}) {
           activeOpacity={0.5}
           onPress={() => navigation.navigate('Profile', {username})}>
           <Image
-            source={require('../components/Profile.png')}
+            source={require('../../data/images/Profile.png')}
             style={styles.ImageIconStyle}
           />
           <Text style={{fontWeight: 'bold', color: 'black'}}>Profile</Text>
@@ -63,7 +63,7 @@ export default function MainMenu({route}) {
           activeOpacity={0.5}
           onPress={() => navigation.navigate('Geocaching', {username})}>
           <Image
-            source={require('../components/Map.png')}
+            source={require('../../data/images/Map.png')}
             style={styles.ImageIconStyle}
           />
           <Text style={{fontWeight: 'bold', color: 'black'}}>Map</Text>
@@ -71,7 +71,7 @@ export default function MainMenu({route}) {
 
         <TouchableOpacity style={styles.SearchStyle} activeOpacity={0.5}>
           <Image
-            source={require('../components/Search.png')}
+            source={require('../../data/images/Search.png')}
             style={styles.ImageIconStyle}
           />
           <Text style={{fontWeight: 'bold', color: 'black'}}>Search</Text>

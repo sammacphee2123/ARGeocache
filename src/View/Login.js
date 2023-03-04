@@ -1,42 +1,31 @@
 import React, {useState} from 'react';
-import {useAuth} from '../providers/AuthProvider';
+import {useAuth} from '../providers/AuthProvider.js';
 import {Alert} from 'react-native';
 import {
   SafeAreaView,
   StyleSheet,
   Text,
-  TextInput,
   Image,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-export default function Register() {
+export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-
+  const {signIn} = useAuth();
   const navigation = useNavigation();
-  const {user, signUp, signIn} = useAuth();
 
-  const onPressSignUp = async () => {
+  const onPressSignIn = async () => {
+    console.log('Press sign in');
     try {
-      if (password === confirmPassword) {
-        if (password.length > 7) {
-          await signUp(username, password);
-          signIn(username, password);
-          await user.functions.insertUser(username, password);
-          navigation.navigate('MainMenu');
-          alert('New Profile Created, you are now signed in');
-        } else {
-          Alert.alert('Password must be at least 8 characters long');
-        }
-      } else {
-        Alert.alert('Passwords do not match, please try again');
-      }
+      await signIn(username, password);
+      navigation.navigate('MainMenu', {username: username});
     } catch (error) {
-      Alert.alert(`Failed to sign up: ${error.message}`);
+      console.log('Failed to sign in');
+      Alert.alert(`Failed to sign in: ${error.message}`);
     }
   };
 
@@ -45,13 +34,12 @@ export default function Register() {
       <View style={styles.viewStyle}>
         <TouchableOpacity onPress={navigation.goBack}>
           <Image
-            source={require('../components/back.png')}
+            source={require('../../data/images/back.png')}
             style={{width: 35, height: 35, marginLeft: 2}}
           />
         </TouchableOpacity>
-        <Text style={styles.textStyle}>Create Your Profile</Text>
+        <Text style={styles.textStyle}>Login To Continue</Text>
       </View>
-
       <View style={styles.container}>
         <View style={styles.inputView}>
           <TextInput
@@ -72,20 +60,8 @@ export default function Register() {
           />
         </View>
 
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Confirm Password"
-            placeholderTextColor="#003f5c"
-            secureTextEntry={true}
-            onChangeText={confirmPassword =>
-              setConfirmPassword(confirmPassword)
-            }
-          />
-        </View>
-
-        <TouchableOpacity style={styles.SubmitButton} onPress={onPressSignUp}>
-          <Text style={{fontWeight: 'bold', color: 'black'}}>Submit</Text>
+        <TouchableOpacity style={styles.SubmitButton} onPress={onPressSignIn}>
+          <Text style={{fontWeight: 'bold', color: 'black'}}>Enter</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -97,7 +73,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    marginTop: 300,
+    marginTop: 275,
   },
   inputView: {
     backgroundColor: '#96DED1',

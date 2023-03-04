@@ -12,13 +12,12 @@ import {useNavigation} from '@react-navigation/native';
 export default function Profile({route}) {
   const navigation = useNavigation();
   const {username} = route.params;
-  console.log('hello');
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffff'}}>
       <View style={styles.viewStyle}>
         <TouchableOpacity onPress={navigation.goBack}>
           <Image
-            source={require('../components/back.png')}
+            source={require('../../data/images/back.png')}
             style={{width: 35, height: 35, marginLeft: 2}}
           />
         </TouchableOpacity>
@@ -26,14 +25,14 @@ export default function Profile({route}) {
         <TouchableOpacity
           onPress={() => navigation.navigate('EditProfile', {username})}>
           <Image
-            source={require('../components/edit.png')}
+            source={require('../../data/images/edit.png')}
             style={{flex: 0.8, marginRight: 10}}
           />
         </TouchableOpacity>
       </View>
 
       <View style={styles.container}>
-        <Image source={require('../components/CameraButton.png')} />
+        <Image source={require('../../data/images/CameraButton.png')} />
       </View>
       <View style={{alignItems: 'center', marginTop: 20}}>
         <Text style={{fontWeight: '600', color: 'black', fontSize: 16}}>

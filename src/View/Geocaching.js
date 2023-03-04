@@ -123,7 +123,7 @@ export default function Geocaching({route}) {
       <View style={styles.viewStyle}>
         <TouchableOpacity onPress={navigation.goBack}>
           <Image
-            source={require('../components/back.png')}
+            source={require('../../data/images/back.png')}
             style={{width: 35, height: 35, marginLeft: 2}}
           />
         </TouchableOpacity>
