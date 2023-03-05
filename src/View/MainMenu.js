@@ -10,17 +10,19 @@ import {
   Image,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import ButtonFactory from '../components/buttons/ButtonFactory.js';
 
 export default function MainMenu({route}) {
   const navigation = useNavigation();
   const {username} = route.params;
   const {signOut} = useAuth();
+  const buttonFactory = new ButtonFactory();
   const onPressSignOut = async () => {
     console.log('Press sign out');
     console.log(username);
     try {
       await signOut();
-      navigation.navigate('HomeScreen');
+      return true;
     } catch (error) {
       console.log('Failed to sign out');
       Alert.alert(`Failed to sign in: ${error.message}`);
@@ -30,52 +32,67 @@ export default function MainMenu({route}) {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffff'}}>
       <View style={styles.viewStyle}>
-        <TouchableOpacity onPress={onPressSignOut}>
-          <Text style={{fontWeight: 'bold', color: 'black'}}>Logout</Text>
-        </TouchableOpacity>
+        {
+          buttonFactory.createButton({
+            action: onPressSignOut,
+            navigation,
+            navTo: 'HomeScreen',
+            graphic: (
+              <Text style={{fontWeight: 'bold', color: 'black'}}>Logout</Text>
+            ),
+          }).component
+        }
         <Text style={styles.textStyle}>Welcome</Text>
       </View>
 
-      <View style={styles.CameraContainer}>
-        <Image
-          source={require('../../data/images/WelcomeIcon.png')}
-          style={{
-            height: 225,
-            width: 225,
-            resizeMode: 'contain',
-          }}
-        />
-      </View>
+      <View style={styles.CameraContainer}></View>
       <View style={styles.ProfileContainer}>
-        <TouchableOpacity
-          style={styles.ProfileStyle}
-          activeOpacity={0.5}
-          onPress={() => navigation.navigate('Profile', {username})}>
-          <Image
-            source={require('../../data/images/Profile.png')}
-            style={styles.ImageIconStyle}
-          />
-          <Text style={{fontWeight: 'bold', color: 'black'}}>Profile</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.MapStyle}
-          activeOpacity={0.5}
-          onPress={() => navigation.navigate('Geocaching', {username})}>
-          <Image
-            source={require('../../data/images/Map.png')}
-            style={styles.ImageIconStyle}
-          />
-          <Text style={{fontWeight: 'bold', color: 'black'}}>Map</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.SearchStyle} activeOpacity={0.5}>
-          <Image
-            source={require('../../data/images/Search.png')}
-            style={styles.ImageIconStyle}
-          />
-          <Text style={{fontWeight: 'bold', color: 'black'}}>Search</Text>
-        </TouchableOpacity>
+        {
+          buttonFactory.createButton({
+            navigation,
+            navTo: 'Profile',
+            graphic: (
+              <>
+                <Image
+                  source={require('../../data/images/Profile.png')}
+                  style={styles.ImageIconStyle}
+                />
+                <Text style={{fontWeight: 'bold', color: 'black'}}>
+                  Profile
+                </Text>
+              </>
+            ),
+          }).component
+        }
+        {
+          buttonFactory.createButton({
+            navigation,
+            navTo: 'Geocaching',
+            graphic: (
+              <>
+                <Image
+                  source={require('../../data/images/Map.png')}
+                  style={styles.ImageIconStyle}
+                />
+                <Text style={{fontWeight: 'bold', color: 'black'}}>Map</Text>
+              </>
+            ),
+          }).component
+        }
+        {
+          buttonFactory.createButton({
+            successMessage: 'Search Pressed',
+            graphic: (
+              <>
+                <Image
+                  source={require('../../data/images/Search.png')}
+                  style={styles.ImageIconStyle}
+                />
+                <Text style={{fontWeight: 'bold', color: 'black'}}>Search</Text>
+              </>
+            ),
+          }).component
+        }
       </View>
     </SafeAreaView>
   );

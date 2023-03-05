@@ -14,6 +14,7 @@ import {
   LogBox,
   PermissionsAndroid,
 } from 'react-native';
+import ButtonFactory from '../components/buttons/ButtonFactory';
 
 export default function Geocaching({route}) {
   LogBox.ignoreAllLogs();
@@ -26,6 +27,7 @@ export default function Geocaching({route}) {
   const [geocacheList, setGeocacheList] = useState([]);
   const [geocacheID, setGeocacheID] = useState('');
   let watchID = null;
+  const buttonFactory = new ButtonFactory();
   useEffect(() => {
     const requestLocationPermission = async () => {
       try {
@@ -121,12 +123,7 @@ export default function Geocaching({route}) {
   return (
     <View style={styles.body}>
       <View style={styles.viewStyle}>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <Image
-            source={require('../../data/images/back.png')}
-            style={{width: 35, height: 35, marginLeft: 2}}
-          />
-        </TouchableOpacity>
+        {buttonFactory.createButton({navigation, navTo: -1}).component}
         <Text style={styles.textStyle}>Geocaching</Text>
       </View>
       <MapView
@@ -156,11 +153,13 @@ export default function Geocaching({route}) {
         })}
       </MapView>
       <View style={styles.buttonCallout}>
-        <TouchableOpacity
-          style={[styles.touchable]}
-          onPress={() => console.log('press')}>
-          <Text style={styles.touchableText}>Place Geocache</Text>
-        </TouchableOpacity>
+        {
+          buttonFactory.createButton({
+            style: styles.touchable,
+            successMessage: 'Geocache placed',
+            graphic: <Text style={styles.touchableText}>Place Geocache</Text>,
+          }).component
+        }
       </View>
     </View>
   );

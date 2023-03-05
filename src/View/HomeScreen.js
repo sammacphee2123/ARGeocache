@@ -1,16 +1,12 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import ButtonFactory from '../components/buttons/ButtonFactory';
+import ButtonStyle from '../components/buttons/ButtonStyle';
 
 export default function HomeScreen() {
   const navigation = useNavigation();
+  const buttonFactory = new ButtonFactory();
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffff'}}>
       <View style={styles.viewStyle}>
@@ -22,18 +18,26 @@ export default function HomeScreen() {
           source={require('../../data/images/WelcomeIcon.png')}
           style={styles.image}
         />
-
-        <TouchableOpacity
-          style={styles.LoginButton}
-          onPress={() => navigation.navigate('Login')}>
-          <Text style={{fontWeight: 'bold', color: 'black'}}>Login</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.RegisterButton}
-          onPress={() => navigation.navigate('Register')}>
-          <Text style={{fontWeight: 'bold', color: 'black'}}>Register</Text>
-        </TouchableOpacity>
+        {
+          buttonFactory.createButton({
+            navigation,
+            navTo: 'Login',
+            style: ButtonStyle.namedButtonStyle('center', {marginTop: 10}),
+            graphic: (
+              <Text style={{fontWeight: 'bold', color: 'black'}}>Login</Text>
+            ),
+          }).component
+        }
+        {
+          buttonFactory.createButton({
+            navigation,
+            navTo: 'Register',
+            style: ButtonStyle.namedButtonStyle('center', {marginTop: 10}),
+            graphic: (
+              <Text style={{fontWeight: 'bold', color: 'black'}}>Register</Text>
+            ),
+          }).component
+        }
       </View>
     </SafeAreaView>
   );
@@ -45,24 +49,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     marginTop: 30,
-  },
-
-  LoginButton: {
-    width: '40%',
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#2AAA8A',
-    marginTop: 10,
-  },
-
-  RegisterButton: {
-    width: '40%',
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#2AAA8A',
-    marginTop: 10,
   },
 
   image: {

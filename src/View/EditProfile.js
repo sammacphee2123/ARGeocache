@@ -5,12 +5,13 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   Image,
   View,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import CheckBox from '@react-native-community/checkbox';
+import ButtonFactory from '../components/buttons/ButtonFactory';
+import ButtonStyle from '../components/buttons/ButtonStyle';
 
 export default function EditProfile({route}) {
   const [username, setNewUsername] = useState(route.params.username);
@@ -19,6 +20,7 @@ export default function EditProfile({route}) {
   const [isSelected, setSelection] = useState(false);
   const navigation = useNavigation();
   const {user} = useAuth();
+  const buttonFactory = new ButtonFactory();
 
   const onPressUpdateProfile = async () => {
     try {
@@ -27,6 +29,7 @@ export default function EditProfile({route}) {
           await user.functions.updateProfile(username, password, isSelected);
           navigation.navigate('MainMenu', {username: route.params.username});
           alert('Profile successfully updated');
+          return true;
         } else {
           Alert.alert('Password must be at least 8 characters long');
         }
@@ -40,21 +43,18 @@ export default function EditProfile({route}) {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffff'}}>
       <View style={styles.viewStyle}>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <Image
-            source={require('../../data/images/back.png')}
-            style={{width: 35, height: 35, marginLeft: 2}}
-          />
-        </TouchableOpacity>
+        {buttonFactory.createButton({navigation, navTo: -1}).component}
         <Text style={styles.textStyle}>Edit Profile</Text>
       </View>
       <View style={styles.container}>
-        <TouchableOpacity
-          onPress={() => {
-            alert('Open Camera');
-          }}>
-          <Image source={require('../../data/images/CameraButton.png')} />
-        </TouchableOpacity>
+        {
+          buttonFactory.createButton({
+            graphic: (
+              <Image source={require('../../data/images/CameraButton.png')} />
+            ),
+            successMessage: 'Open Camera',
+          }).component
+        }
       </View>
 
       <View style={styles.container}>
@@ -100,23 +100,30 @@ export default function EditProfile({route}) {
           />
         </View>
 
-        <TouchableOpacity
-          style={styles.SaveButton}
-          onPress={() => {
-            onPressUpdateProfile();
-            alert('Changes Saved');
-          }}>
-          <Text style={{fontWeight: 'bold', color: 'black'}}>Save</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.DeleteButton}
-          onPress={() => {
-            alert('Changes Saved');
-          }}>
-          <Text style={{fontWeight: 'bold', color: 'black'}}>
-            Delete Account
-          </Text>
-        </TouchableOpacity>
+        {
+          buttonFactory.createButton({
+            style: ButtonStyle.namedButtonStyle('center', {marginBottom: 20}),
+            action: onPressUpdateProfile,
+            successMessage: 'Changes Saved',
+            graphic: (
+              <Text style={{fontWeight: 'bold', color: 'black'}}>Save</Text>
+            ),
+          }).component
+        }
+        {
+          buttonFactory.createButton({
+            style: ButtonStyle.namedButtonStyle('center', {
+              backgroundColor: '#cc0000',
+              marginBottom: 20,
+            }),
+            successMessage: 'Account deleted',
+            graphic: (
+              <Text style={{fontWeight: 'bold', color: 'black'}}>
+                Delete Account
+              </Text>
+            ),
+          }).component
+        }
       </View>
     </SafeAreaView>
   );

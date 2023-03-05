@@ -11,6 +11,8 @@ import {
   View,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import ButtonFactory from '../components/buttons/ButtonFactory';
+import ButtonStyle from '../components/buttons/ButtonStyle';
 
 export default function Register() {
   const [username, setUsername] = useState('');
@@ -19,6 +21,7 @@ export default function Register() {
 
   const navigation = useNavigation();
   const {user, signUp, signIn} = useAuth();
+  const buttonFactory = new ButtonFactory();
 
   const onPressSignUp = async () => {
     try {
@@ -43,12 +46,7 @@ export default function Register() {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffff'}}>
       <View style={styles.viewStyle}>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <Image
-            source={require('../../data/images/back.png')}
-            style={{width: 35, height: 35, marginLeft: 2}}
-          />
-        </TouchableOpacity>
+        {buttonFactory.createButton({navigation, navTo: -1}).component}
         <Text style={styles.textStyle}>Create Your Profile</Text>
       </View>
 
@@ -84,9 +82,15 @@ export default function Register() {
           />
         </View>
 
-        <TouchableOpacity style={styles.SubmitButton} onPress={onPressSignUp}>
-          <Text style={{fontWeight: 'bold', color: 'black'}}>Submit</Text>
-        </TouchableOpacity>
+        {
+          buttonFactory.createButton({
+            style: ButtonStyle.namedButtonStyle('center'),
+            action: onPressSignUp,
+            graphic: (
+              <Text style={{fontWeight: 'bold', color: 'black'}}>Submit</Text>
+            ),
+          }).component
+        }
       </View>
     </SafeAreaView>
   );
@@ -111,14 +115,6 @@ const styles = StyleSheet.create({
     height: 50,
     flex: 1,
     padding: 10,
-  },
-
-  SubmitButton: {
-    width: '40%',
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#2AAA8A',
   },
   textStyle: {
     fontSize: 25,

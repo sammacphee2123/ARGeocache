@@ -8,27 +8,30 @@ import {
   View,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import ButtonFactory from '../components/buttons/ButtonFactory';
 
 export default function Profile({route}) {
   const navigation = useNavigation();
   const {username} = route.params;
+  const buttonFactory = new ButtonFactory();
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffff'}}>
       <View style={styles.viewStyle}>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <Image
-            source={require('../../data/images/back.png')}
-            style={{width: 35, height: 35, marginLeft: 2}}
-          />
-        </TouchableOpacity>
+        {buttonFactory.createButton({navigation, navTo: -1}).component}
         <Text style={styles.textStyle}>User Profile</Text>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('EditProfile', {username})}>
-          <Image
-            source={require('../../data/images/edit.png')}
-            style={{flex: 0.8, marginRight: 10}}
-          />
-        </TouchableOpacity>
+        {
+          buttonFactory.createButton({
+            navigation,
+            navTo: 'EditProfile',
+            graphic: (
+              <Image
+                source={require('../../data/images/edit.png')}
+                style={{flex: 0.8, marginRight: 10}}
+              />
+            ),
+          }).component
+        }
       </View>
 
       <View style={styles.container}>

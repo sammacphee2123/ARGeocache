@@ -11,33 +11,32 @@ import {
   View,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import ButtonFactory from '../components/buttons/ButtonFactory.js';
+import ButtonStyle from '../components/buttons/ButtonStyle.js';
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const {signIn} = useAuth();
   const navigation = useNavigation();
+  const buttonFactory = new ButtonFactory();
 
   const onPressSignIn = async () => {
     console.log('Press sign in');
     try {
       await signIn(username, password);
-      navigation.navigate('MainMenu', {username: username});
+      return true;
     } catch (error) {
       console.log('Failed to sign in');
       Alert.alert(`Failed to sign in: ${error.message}`);
     }
+    return false;
   };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffff'}}>
       <View style={styles.viewStyle}>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <Image
-            source={require('../../data/images/back.png')}
-            style={{width: 35, height: 35, marginLeft: 2}}
-          />
-        </TouchableOpacity>
+        {buttonFactory.createButton({navigation, navTo: -1}).component}
         <Text style={styles.textStyle}>Login To Continue</Text>
       </View>
       <View style={styles.container}>
@@ -60,9 +59,17 @@ export default function Login() {
           />
         </View>
 
-        <TouchableOpacity style={styles.SubmitButton} onPress={onPressSignIn}>
-          <Text style={{fontWeight: 'bold', color: 'black'}}>Enter</Text>
-        </TouchableOpacity>
+        {
+          buttonFactory.createButton({
+            style: ButtonStyle.namedButtonStyle('center'),
+            graphic: (
+              <Text style={{fontWeight: 'bold', color: 'black'}}>Enter</Text>
+            ),
+            action: onPressSignIn,
+            navigation,
+            navTo: 'MainMenu',
+          }).component
+        }
       </View>
     </SafeAreaView>
   );
@@ -87,14 +94,6 @@ const styles = StyleSheet.create({
     height: 50,
     flex: 1,
     padding: 10,
-  },
-
-  SubmitButton: {
-    width: '40%',
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#2AAA8A',
   },
   textStyle: {
     fontSize: 25,
