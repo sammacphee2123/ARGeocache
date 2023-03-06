@@ -1,38 +1,27 @@
 import ActionButtonFactory from './ActionButtonFactory';
 import BackButtonFactory from './BackButtonFactory';
+import MessageButtonFactory from './MessageButtonFactory';
 import NavigationButtonFactory from './NavigationButtonFactory';
 
 export default class ButtonFactory {
-  _getButtonFactory(action, navigation, navigationLocation, successMessage) {
+  _getButtonFactory(action, navigation, navigationLocation, message) {
     if (navigation && navigationLocation === -1) {
       return new BackButtonFactory();
     } else if (navigation) {
       return new NavigationButtonFactory();
-    } else if (action || successMessage) {
+    } else if (action) {
       return new ActionButtonFactory();
+    } else if (message) {
+      return new MessageButtonFactory();
     }
   }
 
-  createButton({
-    buttonStyle,
-    action,
-    navigation,
-    navTo,
-    successMessage,
-    failMessage,
-  }) {
+  createButton({action, navigation, navTo, message, buttonStyle}) {
     return this._getButtonFactory(
       action,
       navigation,
       navTo,
-      successMessage,
-    ).createButton(
-      buttonStyle,
-      action,
-      navigation,
-      navTo,
-      successMessage,
-      failMessage,
-    );
+      message,
+    ).createButton(action, navigation, navTo, message, buttonStyle);
   }
 }

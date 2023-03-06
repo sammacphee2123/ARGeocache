@@ -3,31 +3,24 @@ import Button from './Button';
 
 export default class NavigationButton extends Button {
   constructor(
-    buttonStyle,
     action,
     navigation,
     navigateOnSuccess,
     successMessage,
-    failMessage,
+    buttonStyle,
   ) {
-    super(buttonStyle);
-    this._component = this._createComponent(async () => {
-      try {
-        if (!action || (await action())) {
-          navigation.navigate(navigateOnSuccess);
-          if (successMessage) {
-            Alert.alert(null, successMessage);
-          }
-        } else {
-          if (failMessage) {
-            Alert.alert(null, failMessage);
-          }
-        }
-      } catch (error) {
-        if (failMessage) {
-          Alert.alert(null, failMessage);
+    super(async () => {
+      if (action) {
+        const errorMessage = await action();
+        if (errorMessage) {
+          Alert.alert(errorMessage);
+          return;
         }
       }
-    });
+      navigation.navigate(navigateOnSuccess);
+      if (successMessage) {
+        Alert.alert(successMessage);
+      }
+    }, buttonStyle);
   }
 }

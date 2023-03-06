@@ -1,18 +1,11 @@
 import React, {useState} from 'react';
 import {useAuth} from '../providers/AuthProvider';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
-  Image,
-  View,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import CheckBox from '@react-native-community/checkbox';
 import ButtonFactory from '../components/buttons/ButtonFactory';
-import IconButtonStyle from '../components/buttons/IconButtonStyle';
-import CenterButtonStyle from '../components/buttons/CenterButtonStyle';
+import IconButtonStyle from '../components/buttons/button-styles/IconButtonStyle';
+import CenterButtonStyle from '../components/buttons/button-styles/CenterButtonStyle';
 
 export default function EditProfile() {
   const {user} = useAuth();
@@ -24,23 +17,18 @@ export default function EditProfile() {
   const buttonFactory = new ButtonFactory();
 
   const onPressUpdateProfile = async () => {
+    if (password !== confirmPassword)
+      return 'Passwords do not match, please try again';
+    if (password.length < 8)
+      return 'Password must be at least 8 characters long';
+
     try {
-      if (password === confirmPassword) {
-        if (password.length > 7) {
-          await user.functions.updateProfile(username, password, isSelected);
-          navigation.navigate('MainMenu');
-          alert('Profile successfully updated');
-          return true;
-        } else {
-          Alert.alert('Password must be at least 8 characters long');
-        }
-      } else {
-        Alert.alert('Passwords do not match, please try again');
-      }
+      await user.functions.updateProfile(username, password, isSelected);
     } catch (error) {
-      Alert.alert(`Failed to sign up: ${error.message}`);
+      return `Failed to sign up: ${error.message}`;
     }
   };
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffff'}}>
       <View style={styles.viewStyle}>
@@ -50,7 +38,7 @@ export default function EditProfile() {
       <View style={styles.container}>
         {
           buttonFactory.createButton({
-            successMessage: 'Open Camera',
+            message: 'Open Camera',
             buttonStyle: new IconButtonStyle(
               require('./../../data/images/CameraButton.png'),
               null,
@@ -59,7 +47,6 @@ export default function EditProfile() {
           }).component
         }
       </View>
-
       <View style={styles.container}>
         <View style={styles.inputView}>
           <TextInput
@@ -70,7 +57,6 @@ export default function EditProfile() {
             onChangeText={username => setNewUsername(username)}
           />
         </View>
-
         <View style={styles.inputView}>
           <TextInput
             style={styles.TextInput}
@@ -80,7 +66,6 @@ export default function EditProfile() {
             onChangeText={password => setNewPassword(password)}
           />
         </View>
-
         <View style={styles.inputView}>
           <TextInput
             style={styles.TextInput}
@@ -92,7 +77,6 @@ export default function EditProfile() {
             }
           />
         </View>
-
         <View style={styles.checkboxContainer}>
           <Text style={styles.label}>
             Would you like your account to be private?
@@ -103,17 +87,18 @@ export default function EditProfile() {
             style={styles.checkbox}
           />
         </View>
-
         {
           buttonFactory.createButton({
             action: onPressUpdateProfile,
-            successMessage: 'Changes Saved',
+            message: 'Changes Saved',
+            navigation,
+            navTo: 'MainMenu',
             buttonStyle: new CenterButtonStyle('Save'),
           }).component
         }
         {
           buttonFactory.createButton({
-            successMessage: 'Account deleted',
+            message: 'Account deleted',
             navigation,
             navTo: 'HomeScreen',
             buttonStyle: new CenterButtonStyle('Delete Account', '#cc0000'),

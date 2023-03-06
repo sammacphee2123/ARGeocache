@@ -1,14 +1,7 @@
 import BackButton from './BackButton';
 
 export default class BackButtonFactory {
-  createButton(
-    _buttonStyle,
-    _action,
-    navigation,
-    _navTo,
-    _successMessage,
-    _failMessage,
-  ) {
+  createButton(_action, navigation, _navTo, _successMessage, _buttonStyle) {
     return new BackButton(navigation);
   }
 }

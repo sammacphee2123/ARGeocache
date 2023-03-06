@@ -7,9 +7,9 @@ import {useAuth} from '../providers/AuthProvider';
 import {Alert} from 'react-native';
 import {View, Text, StyleSheet, LogBox, PermissionsAndroid} from 'react-native';
 import ButtonFactory from '../components/buttons/ButtonFactory';
-import CenterButtonStyle from '../components/buttons/CenterButtonStyle';
+import CenterButtonStyle from '../components/buttons/button-styles/CenterButtonStyle';
 
-export default function Geocaching({route}) {
+export default function Geocaching() {
   LogBox.ignoreAllLogs();
   const navigation = useNavigation();
   const {user} = useAuth();
@@ -62,7 +62,7 @@ export default function Geocaching({route}) {
       try {
         console.log('picking up geocache');
         console.log(geocacheID);
-        await user.functions.pickUpGeocache(username, geocacheID);
+        await user.functions.pickUpGeocache(user.profile.email, geocacheID);
         await user.functions.updateGeocache(geocacheID, 0, 0);
         Alert.alert('Geocache collected!');
       } catch (err) {
@@ -146,7 +146,7 @@ export default function Geocaching({route}) {
       <View style={styles.buttonCallout}>
         {
           buttonFactory.createButton({
-            successMessage: 'Geocache placed',
+            message: 'Geocache placed',
             buttonStyle: new CenterButtonStyle(
               'Place Geocache',
               'lightblue',
@@ -176,14 +176,6 @@ const styles = StyleSheet.create({
   map: {
     width: '100%',
     height: '100%',
-  },
-  ImageIconStyle: {
-    flex: 1,
-    padding: 15,
-    margin: 5,
-    height: 25,
-    width: 25,
-    resizeMode: 'stretch',
   },
   buttonCallout: {
     height: 75,

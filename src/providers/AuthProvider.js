@@ -8,37 +8,47 @@ const AuthProvider = ({children}) => {
   const [user, setUser] = useState(app.currentUser);
   const realmRef = useRef(null);
 
-  const signIn = async (email, password) => {
-    const creds = Realm.Credentials.emailPassword(email, password);
-    const user = await app.logIn(creds);
-    setUser(user);
-    if (user === null) {
-      return false;
+  useEffect(() => {
+    if (!user) {
+      return;
     }
+
     const config = {
       sync: {
         user,
         partitionValue: `user=${user.id}`,
       },
     };
-    Realm.open(config).then(userRealm => (realmRef.current = userRealm));
-    return true;
+
+    Realm.open(config).then(userRealm => {
+      realmRef.current = userRealm;
+    });
+
+    return () => {
+      const userRealm = realmRef.current;
+      if (userRealm) {
+        userRealm.close();
+        realmRef.current = null;
+      }
+    };
+  }, [user]);
+
+  const signIn = async (email, password) => {
+    const creds = Realm.Credentials.emailPassword(email, password);
+    const newUser = await app.logIn(creds);
+    setUser(newUser);
+    return newUser != null;
   };
 
-  const signUp = async (email, password) => {
+  const signUp = async (email, password) =>
     await app.emailPasswordAuth.registerUser({email, password});
-  };
 
   const signOut = async () => {
     if (user == null) {
       console.warn("Not logged in, can't log out!");
       return;
     }
-    user.logOut();
-    if (realmRef.current) {
-      realmRef.current.close();
-      realmRef.current = null;
-    }
+    await user.logOut();
     setUser(null);
   };
 

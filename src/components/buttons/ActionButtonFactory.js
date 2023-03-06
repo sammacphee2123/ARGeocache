@@ -1,14 +1,7 @@
 import ActionButton from './ActionButton';
 
 export default class ActionButtonFactory {
-  createButton(
-    buttonStyle,
-    action,
-    _navigation,
-    _navTo,
-    successMessage,
-    failMessage,
-  ) {
-    return new ActionButton(buttonStyle, action, successMessage, failMessage);
+  createButton(action, _navigation, _navTo, message, buttonStyle) {
+    return new ActionButton(action, message, buttonStyle);
   }
 }

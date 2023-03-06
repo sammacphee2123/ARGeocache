@@ -1,24 +1,20 @@
 import React from 'react';
 import {useAuth} from '../providers/AuthProvider.js';
-import {Alert} from 'react-native';
-import {SafeAreaView, View, Text, StyleSheet, Image} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import ButtonFactory from '../components/buttons/ButtonFactory.js';
-import IconButtonStyle from '../components/buttons/IconButtonStyle.js';
-import TextButtonStyle from '../components/buttons/TextButtonStyle.js';
+import IconButtonStyle from '../components/buttons/button-styles/IconButtonStyle.js';
+import TextButtonStyle from '../components/buttons/button-styles/TextButtonStyle.js';
 
 export default function MainMenu() {
   const navigation = useNavigation();
   const {signOut} = useAuth();
   const buttonFactory = new ButtonFactory();
   const onPressSignOut = async () => {
-    console.log('Press sign out');
     try {
       await signOut();
-      return true;
     } catch (error) {
-      console.log('Failed to sign out');
-      Alert.alert(`Failed to sign in: ${error.message}`);
+      return `Failed to sign out: ${error.message}`;
     }
   };
 
@@ -35,7 +31,6 @@ export default function MainMenu() {
         }
         <Text style={styles.textStyle}>Welcome</Text>
       </View>
-
       <View style={styles.CameraContainer}></View>
       <View style={styles.ProfileContainer}>
         {
@@ -60,7 +55,7 @@ export default function MainMenu() {
         }
         {
           buttonFactory.createButton({
-            successMessage: 'Search Pressed',
+            message: 'Search Pressed',
             buttonStyle: new IconButtonStyle(
               require('./../../data/images/Search.png'),
               'Search',
@@ -79,7 +74,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 70,
   },
-
   ProfileContainer: {
     flex: 0.5,
     flexDirection: 'row',
@@ -88,7 +82,6 @@ const styles = StyleSheet.create({
     marginTop: 350,
     justifyContent: 'space-between',
   },
-
   textStyle: {
     fontSize: 25,
     fontWeight: '800',

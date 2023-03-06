@@ -2,7 +2,7 @@ import React from 'react';
 import {SafeAreaView, StyleSheet, Text, Image, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import ButtonFactory from '../components/buttons/ButtonFactory';
-import IconButtonStyle from '../components/buttons/IconButtonStyle';
+import IconButtonStyle from '../components/buttons/button-styles/IconButtonStyle';
 
 export default function Profile() {
   const navigation = useNavigation();
@@ -23,7 +23,6 @@ export default function Profile() {
           }).component
         }
       </View>
-
       <View style={styles.container}>
         <Image source={require('./../../data/images/CameraButton.png')} />
       </View>
@@ -32,7 +31,6 @@ export default function Profile() {
           Beginner Level | Joined: 2021
         </Text>
       </View>
-
       <View style={{alignItems: 'flex-start', marginLeft: 20, marginTop: 20}}>
         <Text style={{fontWeight: 'bold', color: 'black', fontSize: 16}}>
           Rewards

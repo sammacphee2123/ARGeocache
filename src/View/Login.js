@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
 import {useAuth} from '../providers/AuthProvider.js';
-import {Alert} from 'react-native';
 import {SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import ButtonFactory from '../components/buttons/ButtonFactory.js';
-import CenterButtonStyle from '../components/buttons/CenterButtonStyle.js';
+import CenterButtonStyle from '../components/buttons/button-styles/CenterButtonStyle.js';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -14,13 +13,11 @@ export default function Login() {
   const buttonFactory = new ButtonFactory();
 
   const onPressSignIn = async () => {
-    console.log('Press sign in');
     try {
-      await signIn(username, password);
-      return true;
+      const success = await signIn(username, password);
+      if (!success) return 'Failed to sign in. Please try again later';
     } catch (error) {
-      console.log('Failed to sign in');
-      Alert.alert(`Failed to sign in: ${error.message}`);
+      return `Failed to sign in: ${error.message}`;
     }
   };
 
@@ -39,7 +36,6 @@ export default function Login() {
             onChangeText={username => setUsername(username)}
           />
         </View>
-
         <View style={styles.inputView}>
           <TextInput
             style={styles.TextInput}
@@ -49,7 +45,6 @@ export default function Login() {
             onChangeText={password => setPassword(password)}
           />
         </View>
-
         {
           buttonFactory.createButton({
             action: onPressSignIn,

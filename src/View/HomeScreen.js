@@ -2,7 +2,7 @@ import React from 'react';
 import {SafeAreaView, View, Text, StyleSheet, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import ButtonFactory from '../components/buttons/ButtonFactory';
-import CenterButtonStyle from '../components/buttons/CenterButtonStyle';
+import CenterButtonStyle from '../components/buttons/button-styles/CenterButtonStyle';
 
 export default function HomeScreen() {
   const navigation = useNavigation();
