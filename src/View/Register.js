@@ -4,7 +4,7 @@ import {Alert} from 'react-native';
 import {SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import ButtonFactory from '../components/buttons/ButtonFactory';
-import ButtonStyle from '../components/buttons/ButtonStyle';
+import CenterButtonStyle from '../components/buttons/CenterButtonStyle';
 
 export default function Register() {
   const [username, setUsername] = useState('');
@@ -76,11 +76,8 @@ export default function Register() {
 
         {
           buttonFactory.createButton({
-            style: ButtonStyle.namedButtonStyle('center'),
             action: onPressSignUp,
-            graphic: (
-              <Text style={{fontWeight: 'bold', color: 'black'}}>Submit</Text>
-            ),
+            buttonStyle: new CenterButtonStyle('Submit'),
           }).component
         }
       </View>

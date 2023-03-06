@@ -2,15 +2,14 @@ import React from 'react';
 import {TouchableOpacity} from 'react-native';
 
 export default class Button {
-  constructor(style, graphic) {
-    this.style = style;
-    this.graphic = graphic;
+  constructor(buttonStyle) {
+    this.buttonStyle = buttonStyle;
   }
 
   _createComponent(action) {
     return (
-      <TouchableOpacity style={this.style} onPress={action}>
-        {this.graphic}
+      <TouchableOpacity style={this.buttonStyle?.style} onPress={action}>
+        {this.buttonStyle?.graphic}
       </TouchableOpacity>
     );
   }

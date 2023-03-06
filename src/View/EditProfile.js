@@ -11,7 +11,8 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import CheckBox from '@react-native-community/checkbox';
 import ButtonFactory from '../components/buttons/ButtonFactory';
-import ButtonStyle from '../components/buttons/ButtonStyle';
+import IconButtonStyle from '../components/buttons/IconButtonStyle';
+import CenterButtonStyle from '../components/buttons/CenterButtonStyle';
 
 export default function EditProfile() {
   const {user} = useAuth();
@@ -49,10 +50,12 @@ export default function EditProfile() {
       <View style={styles.container}>
         {
           buttonFactory.createButton({
-            graphic: (
-              <Image source={require('./../../data/images/CameraButton.png')} />
-            ),
             successMessage: 'Open Camera',
+            buttonStyle: new IconButtonStyle(
+              require('./../../data/images/CameraButton.png'),
+              null,
+              250,
+            ),
           }).component
         }
       </View>
@@ -103,28 +106,17 @@ export default function EditProfile() {
 
         {
           buttonFactory.createButton({
-            style: ButtonStyle.namedButtonStyle('center', {marginBottom: 20}),
             action: onPressUpdateProfile,
             successMessage: 'Changes Saved',
-            graphic: (
-              <Text style={{fontWeight: 'bold', color: 'black'}}>Save</Text>
-            ),
+            buttonStyle: new CenterButtonStyle('Save'),
           }).component
         }
         {
           buttonFactory.createButton({
-            style: ButtonStyle.namedButtonStyle('center', {
-              backgroundColor: '#cc0000',
-              marginBottom: 20,
-            }),
             successMessage: 'Account deleted',
             navigation,
             navTo: 'HomeScreen',
-            graphic: (
-              <Text style={{fontWeight: 'bold', color: 'black'}}>
-                Delete Account
-              </Text>
-            ),
+            buttonStyle: new CenterButtonStyle('Delete Account', '#cc0000'),
           }).component
         }
       </View>
@@ -136,37 +128,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    marginTop: 30,
+    justifyContent: 'space-evenly',
   },
   inputView: {
     backgroundColor: '#96DED1',
     width: '70%',
     height: 45,
-    marginBottom: 20,
     alignItems: 'flex-start',
   },
-
   TextInput: {
     height: 50,
     flex: 1,
     padding: 10,
-  },
-
-  SaveButton: {
-    width: '40%',
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#2AAA8A',
-    marginBottom: 20,
-  },
-  DeleteButton: {
-    width: '40%',
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#cc0000',
-    marginBottom: 20,
   },
   textStyle: {
     fontSize: 25,
@@ -185,7 +158,6 @@ const styles = StyleSheet.create({
   },
   checkboxContainer: {
     flexDirection: 'column',
-    marginBottom: 20,
   },
   checkbox: {
     alignSelf: 'center',

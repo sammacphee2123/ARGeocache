@@ -2,8 +2,9 @@ import React from 'react';
 import {SafeAreaView, StyleSheet, Text, Image, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import ButtonFactory from '../components/buttons/ButtonFactory';
+import IconButtonStyle from '../components/buttons/IconButtonStyle';
 
-export default function Profile({route}) {
+export default function Profile() {
   const navigation = useNavigation();
   const buttonFactory = new ButtonFactory();
 
@@ -16,11 +17,8 @@ export default function Profile({route}) {
           buttonFactory.createButton({
             navigation,
             navTo: 'EditProfile',
-            graphic: (
-              <Image
-                source={require('./../../data/images/edit.png')}
-                style={{flex: 0.8, marginRight: 10}}
-              />
+            buttonStyle: new IconButtonStyle(
+              require('./../../data/images/edit.png'),
             ),
           }).component
         }
@@ -56,7 +54,6 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: '#04120f',
     flex: 2,
-    marginLeft: 25,
   },
   viewStyle: {
     backgroundColor: '#29b89e',

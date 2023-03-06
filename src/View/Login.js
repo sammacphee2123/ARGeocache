@@ -4,7 +4,7 @@ import {Alert} from 'react-native';
 import {SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import ButtonFactory from '../components/buttons/ButtonFactory.js';
-import ButtonStyle from '../components/buttons/ButtonStyle.js';
+import CenterButtonStyle from '../components/buttons/CenterButtonStyle.js';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -17,7 +17,6 @@ export default function Login() {
     console.log('Press sign in');
     try {
       await signIn(username, password);
-      console.log('lets go');
       return true;
     } catch (error) {
       console.log('Failed to sign in');
@@ -53,13 +52,10 @@ export default function Login() {
 
         {
           buttonFactory.createButton({
-            style: ButtonStyle.namedButtonStyle('center'),
-            graphic: (
-              <Text style={{fontWeight: 'bold', color: 'black'}}>Enter</Text>
-            ),
             action: onPressSignIn,
             navigation,
             navTo: 'MainMenu',
+            buttonStyle: new CenterButtonStyle('Enter'),
           }).component
         }
       </View>

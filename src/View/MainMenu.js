@@ -4,6 +4,8 @@ import {Alert} from 'react-native';
 import {SafeAreaView, View, Text, StyleSheet, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import ButtonFactory from '../components/buttons/ButtonFactory.js';
+import IconButtonStyle from '../components/buttons/IconButtonStyle.js';
+import TextButtonStyle from '../components/buttons/TextButtonStyle.js';
 
 export default function MainMenu() {
   const navigation = useNavigation();
@@ -28,9 +30,7 @@ export default function MainMenu() {
             action: onPressSignOut,
             navigation,
             navTo: 'HomeScreen',
-            graphic: (
-              <Text style={{fontWeight: 'bold', color: 'black'}}>Logout</Text>
-            ),
+            buttonStyle: new TextButtonStyle('Logout'),
           }).component
         }
         <Text style={styles.textStyle}>Welcome</Text>
@@ -42,16 +42,9 @@ export default function MainMenu() {
           buttonFactory.createButton({
             navigation,
             navTo: 'Profile',
-            graphic: (
-              <>
-                <Image
-                  source={require('./../../data/images/Profile.png')}
-                  style={styles.ImageIconStyle}
-                />
-                <Text style={{fontWeight: 'bold', color: 'black'}}>
-                  Profile
-                </Text>
-              </>
+            buttonStyle: new IconButtonStyle(
+              require('./../../data/images/Profile.png'),
+              'Profile',
             ),
           }).component
         }
@@ -59,28 +52,18 @@ export default function MainMenu() {
           buttonFactory.createButton({
             navigation,
             navTo: 'Geocaching',
-            graphic: (
-              <>
-                <Image
-                  source={require('./../../data/images/Map.png')}
-                  style={styles.ImageIconStyle}
-                />
-                <Text style={{fontWeight: 'bold', color: 'black'}}>Map</Text>
-              </>
+            buttonStyle: new IconButtonStyle(
+              require('./../../data/images/Map.png'),
+              'Map',
             ),
           }).component
         }
         {
           buttonFactory.createButton({
             successMessage: 'Search Pressed',
-            graphic: (
-              <>
-                <Image
-                  source={require('./../../data/images/Search.png')}
-                  style={styles.ImageIconStyle}
-                />
-                <Text style={{fontWeight: 'bold', color: 'black'}}>Search</Text>
-              </>
+            buttonStyle: new IconButtonStyle(
+              require('./../../data/images/Search.png'),
+              'Search',
             ),
           }).component
         }
@@ -104,15 +87,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginTop: 350,
     justifyContent: 'space-between',
-  },
-
-  ImageIconStyle: {
-    flex: 1,
-    padding: 15,
-    margin: 5,
-    height: 25,
-    width: 25,
-    resizeMode: 'stretch',
   },
 
   textStyle: {

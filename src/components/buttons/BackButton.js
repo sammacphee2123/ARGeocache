@@ -1,15 +1,10 @@
-import React from 'react';
-import {Image} from 'react-native';
 import Button from './Button';
+import IconButtonStyle from './IconButtonStyle';
 
 export default class BackButton extends Button {
   constructor(navigation) {
     super(
-      null,
-      <Image
-        source={require('./../../../data/images/back.png')}
-        style={{width: 35, height: 35, marginLeft: 2}}
-      />,
+      new IconButtonStyle(require('./../../../data/images/back.png'), null, 35),
     );
     this._component = this._createComponent(navigation.goBack);
   }

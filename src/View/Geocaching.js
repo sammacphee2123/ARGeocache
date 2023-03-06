@@ -7,6 +7,7 @@ import {useAuth} from '../providers/AuthProvider';
 import {Alert} from 'react-native';
 import {View, Text, StyleSheet, LogBox, PermissionsAndroid} from 'react-native';
 import ButtonFactory from '../components/buttons/ButtonFactory';
+import CenterButtonStyle from '../components/buttons/CenterButtonStyle';
 
 export default function Geocaching({route}) {
   LogBox.ignoreAllLogs();
@@ -17,7 +18,6 @@ export default function Geocaching({route}) {
   const [locationStatus, setLocationStatus] = useState('');
   const [geocacheList, setGeocacheList] = useState([]);
   const [geocacheID, setGeocacheID] = useState('');
-  console.log('user', user);
   let watchID = null;
   const buttonFactory = new ButtonFactory();
   useEffect(() => {
@@ -146,9 +146,13 @@ export default function Geocaching({route}) {
       <View style={styles.buttonCallout}>
         {
           buttonFactory.createButton({
-            style: styles.touchable,
             successMessage: 'Geocache placed',
-            graphic: <Text style={styles.touchableText}>Place Geocache</Text>,
+            buttonStyle: new CenterButtonStyle(
+              'Place Geocache',
+              'lightblue',
+              24,
+              200,
+            ),
           }).component
         }
       </View>
@@ -182,22 +186,14 @@ const styles = StyleSheet.create({
     resizeMode: 'stretch',
   },
   buttonCallout: {
-    flex: 1,
-    flexDirection: 'row',
+    height: 75,
+    width: 235,
     position: 'absolute',
     bottom: 10,
-    alignSelf: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: 'transparent',
-    borderWidth: 0.5,
+    borderWidth: 1,
     borderRadius: 20,
-  },
-  touchable: {
-    backgroundColor: 'lightblue',
-    padding: 10,
-    margin: 10,
-  },
-  touchableText: {
-    fontSize: 24,
   },
 });

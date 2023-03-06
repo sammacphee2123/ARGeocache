@@ -2,8 +2,7 @@ import NavigationButton from './NavigationButton';
 
 export default class NavigationButtonFactory {
   createButton(
-    style,
-    graphic,
+    buttonStyle,
     action,
     navigation,
     navigationLocation,
@@ -11,8 +10,7 @@ export default class NavigationButtonFactory {
     failMessage,
   ) {
     return new NavigationButton(
-      style,
-      graphic,
+      buttonStyle,
       action,
       navigation,
       navigationLocation,

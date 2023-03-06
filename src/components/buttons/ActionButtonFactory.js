@@ -2,20 +2,13 @@ import ActionButton from './ActionButton';
 
 export default class ActionButtonFactory {
   createButton(
-    style,
-    graphic,
+    buttonStyle,
     action,
     _navigation,
     _navTo,
     successMessage,
     failMessage,
   ) {
-    return new ActionButton(
-      style,
-      graphic,
-      action,
-      successMessage,
-      failMessage,
-    );
+    return new ActionButton(buttonStyle, action, successMessage, failMessage);
   }
 }

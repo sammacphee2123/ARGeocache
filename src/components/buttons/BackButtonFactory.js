@@ -2,8 +2,7 @@ import BackButton from './BackButton';
 
 export default class BackButtonFactory {
   createButton(
-    _style,
-    _graphic,
+    _buttonStyle,
     _action,
     navigation,
     _navTo,

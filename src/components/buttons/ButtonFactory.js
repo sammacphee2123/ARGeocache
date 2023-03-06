@@ -14,8 +14,7 @@ export default class ButtonFactory {
   }
 
   createButton({
-    style,
-    graphic,
+    buttonStyle,
     action,
     navigation,
     navTo,
@@ -28,8 +27,7 @@ export default class ButtonFactory {
       navTo,
       successMessage,
     ).createButton(
-      style,
-      graphic,
+      buttonStyle,
       action,
       navigation,
       navTo,

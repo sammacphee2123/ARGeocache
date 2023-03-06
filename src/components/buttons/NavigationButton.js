@@ -3,15 +3,14 @@ import Button from './Button';
 
 export default class NavigationButton extends Button {
   constructor(
-    style,
-    graphic,
+    buttonStyle,
     action,
     navigation,
     navigateOnSuccess,
     successMessage,
     failMessage,
   ) {
-    super(style, graphic);
+    super(buttonStyle);
     this._component = this._createComponent(async () => {
       try {
         if (!action || (await action())) {
