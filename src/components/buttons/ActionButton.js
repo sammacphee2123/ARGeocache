@@ -1,11 +1,12 @@
 import {Alert} from 'react-native';
+import Button from './Button';
 
 export default class ActionButton extends Button {
   constructor(style, graphic, action, successMessage, failMessage) {
     super(style, graphic);
-    this._component = super._createComponent(() => {
+    this._component = this._createComponent(async () => {
       try {
-        if (!action || action()) {
+        if (!action || (await action())) {
           if (successMessage) {
             Alert.alert(null, successMessage);
           }

@@ -1,15 +1,7 @@
 import React, {useState} from 'react';
 import {useAuth} from '../providers/AuthProvider';
 import {Alert} from 'react-native';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
-  Image,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import ButtonFactory from '../components/buttons/ButtonFactory';
 import ButtonStyle from '../components/buttons/ButtonStyle';

@@ -1,4 +1,5 @@
 import {Alert} from 'react-native';
+import Button from './Button';
 
 export default class NavigationButton extends Button {
   constructor(
@@ -7,13 +8,17 @@ export default class NavigationButton extends Button {
     action,
     navigation,
     navigateOnSuccess,
+    successMessage,
     failMessage,
   ) {
     super(style, graphic);
-    this._component = super._createComponent(() => {
+    this._component = this._createComponent(async () => {
       try {
-        if (!action || action()) {
+        if (!action || (await action())) {
           navigation.navigate(navigateOnSuccess);
+          if (successMessage) {
+            Alert.alert(null, successMessage);
+          }
         } else {
           if (failMessage) {
             Alert.alert(null, failMessage);

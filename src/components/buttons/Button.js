@@ -1,3 +1,4 @@
+import React from 'react';
 import {TouchableOpacity} from 'react-native';
 
 export default class Button {
@@ -8,7 +9,7 @@ export default class Button {
 
   _createComponent(action) {
     return (
-      <TouchableOpacity style={this.style} activeOpacity={0.5} onPress={action}>
+      <TouchableOpacity style={this.style} onPress={action}>
         {this.graphic}
       </TouchableOpacity>
     );

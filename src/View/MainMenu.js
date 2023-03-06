@@ -1,25 +1,16 @@
 import React from 'react';
 import {useAuth} from '../providers/AuthProvider.js';
 import {Alert} from 'react-native';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import ButtonFactory from '../components/buttons/ButtonFactory.js';
 
-export default function MainMenu({route}) {
+export default function MainMenu() {
   const navigation = useNavigation();
-  const {username} = route.params;
   const {signOut} = useAuth();
   const buttonFactory = new ButtonFactory();
   const onPressSignOut = async () => {
     console.log('Press sign out');
-    console.log(username);
     try {
       await signOut();
       return true;
@@ -54,7 +45,7 @@ export default function MainMenu({route}) {
             graphic: (
               <>
                 <Image
-                  source={require('../../data/images/Profile.png')}
+                  source={require('./../../data/images/Profile.png')}
                   style={styles.ImageIconStyle}
                 />
                 <Text style={{fontWeight: 'bold', color: 'black'}}>
@@ -71,7 +62,7 @@ export default function MainMenu({route}) {
             graphic: (
               <>
                 <Image
-                  source={require('../../data/images/Map.png')}
+                  source={require('./../../data/images/Map.png')}
                   style={styles.ImageIconStyle}
                 />
                 <Text style={{fontWeight: 'bold', color: 'black'}}>Map</Text>
@@ -85,7 +76,7 @@ export default function MainMenu({route}) {
             graphic: (
               <>
                 <Image
-                  source={require('../../data/images/Search.png')}
+                  source={require('./../../data/images/Search.png')}
                   style={styles.ImageIconStyle}
                 />
                 <Text style={{fontWeight: 'bold', color: 'black'}}>Search</Text>

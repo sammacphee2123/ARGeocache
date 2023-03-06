@@ -8,35 +8,21 @@ const AuthProvider = ({children}) => {
   const [user, setUser] = useState(app.currentUser);
   const realmRef = useRef(null);
 
-  useEffect(() => {
-    if (!user) {
-      return;
+  const signIn = async (email, password) => {
+    const creds = Realm.Credentials.emailPassword(email, password);
+    const user = await app.logIn(creds);
+    setUser(user);
+    if (user === null) {
+      return false;
     }
-
     const config = {
       sync: {
         user,
         partitionValue: `user=${user.id}`,
       },
     };
-
-    Realm.open(config).then(userRealm => {
-      realmRef.current = userRealm;
-    });
-
-    return () => {
-      const userRealm = realmRef.current;
-      if (userRealm) {
-        userRealm.close();
-        realmRef.current = null;
-      }
-    };
-  }, [user]);
-
-  const signIn = async (email, password) => {
-    const creds = Realm.Credentials.emailPassword(email, password);
-    const newUser = await app.logIn(creds);
-    setUser(newUser);
+    Realm.open(config).then(userRealm => (realmRef.current = userRealm));
+    return true;
   };
 
   const signUp = async (email, password) => {
@@ -49,6 +35,10 @@ const AuthProvider = ({children}) => {
       return;
     }
     user.logOut();
+    if (realmRef.current) {
+      realmRef.current.close();
+      realmRef.current = null;
+    }
     setUser(null);
   };
 

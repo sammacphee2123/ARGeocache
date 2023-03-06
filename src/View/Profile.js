@@ -1,18 +1,10 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  Image,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, Image, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import ButtonFactory from '../components/buttons/ButtonFactory';
 
 export default function Profile({route}) {
   const navigation = useNavigation();
-  const {username} = route.params;
   const buttonFactory = new ButtonFactory();
 
   return (
@@ -26,7 +18,7 @@ export default function Profile({route}) {
             navTo: 'EditProfile',
             graphic: (
               <Image
-                source={require('../../data/images/edit.png')}
+                source={require('./../../data/images/edit.png')}
                 style={{flex: 0.8, marginRight: 10}}
               />
             ),
@@ -35,7 +27,7 @@ export default function Profile({route}) {
       </View>
 
       <View style={styles.container}>
-        <Image source={require('../../data/images/CameraButton.png')} />
+        <Image source={require('./../../data/images/CameraButton.png')} />
       </View>
       <View style={{alignItems: 'center', marginTop: 20}}>
         <Text style={{fontWeight: '600', color: 'black', fontSize: 16}}>

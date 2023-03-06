@@ -5,27 +5,19 @@ import Geolocation from '@react-native-community/geolocation';
 import {useNavigation} from '@react-navigation/native';
 import {useAuth} from '../providers/AuthProvider';
 import {Alert} from 'react-native';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  LogBox,
-  PermissionsAndroid,
-} from 'react-native';
+import {View, Text, StyleSheet, LogBox, PermissionsAndroid} from 'react-native';
 import ButtonFactory from '../components/buttons/ButtonFactory';
 
 export default function Geocaching({route}) {
   LogBox.ignoreAllLogs();
   const navigation = useNavigation();
   const {user} = useAuth();
-  const {username} = route.params;
   const [currentLongitude, setCurrentLongitude] = useState(-66.64159932959872);
   const [currentLatitude, setCurrentLatitude] = useState(45.94995093187056);
   const [locationStatus, setLocationStatus] = useState('');
   const [geocacheList, setGeocacheList] = useState([]);
   const [geocacheID, setGeocacheID] = useState('');
+  console.log('user', user);
   let watchID = null;
   const buttonFactory = new ButtonFactory();
   useEffect(() => {
@@ -69,7 +61,6 @@ export default function Geocaching({route}) {
       //if(Math.sqrt(Math.pow(currentLatitude-geoLat ,2) +Math.pow(currentLongitude-geoLong,2) ) <= 0.001){
       try {
         console.log('picking up geocache');
-        console.log(username);
         console.log(geocacheID);
         await user.functions.pickUpGeocache(username, geocacheID);
         await user.functions.updateGeocache(geocacheID, 0, 0);

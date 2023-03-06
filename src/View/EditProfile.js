@@ -13,13 +13,13 @@ import CheckBox from '@react-native-community/checkbox';
 import ButtonFactory from '../components/buttons/ButtonFactory';
 import ButtonStyle from '../components/buttons/ButtonStyle';
 
-export default function EditProfile({route}) {
-  const [username, setNewUsername] = useState(route.params.username);
+export default function EditProfile() {
+  const {user} = useAuth();
+  const [username, setNewUsername] = useState(user.profile.email);
   const [password, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isSelected, setSelection] = useState(false);
   const navigation = useNavigation();
-  const {user} = useAuth();
   const buttonFactory = new ButtonFactory();
 
   const onPressUpdateProfile = async () => {
@@ -27,7 +27,7 @@ export default function EditProfile({route}) {
       if (password === confirmPassword) {
         if (password.length > 7) {
           await user.functions.updateProfile(username, password, isSelected);
-          navigation.navigate('MainMenu', {username: route.params.username});
+          navigation.navigate('MainMenu');
           alert('Profile successfully updated');
           return true;
         } else {
@@ -50,7 +50,7 @@ export default function EditProfile({route}) {
         {
           buttonFactory.createButton({
             graphic: (
-              <Image source={require('../../data/images/CameraButton.png')} />
+              <Image source={require('./../../data/images/CameraButton.png')} />
             ),
             successMessage: 'Open Camera',
           }).component
@@ -63,6 +63,7 @@ export default function EditProfile({route}) {
             style={styles.TextInput}
             placeholder="New Username"
             placeholderTextColor="#003f5c"
+            value={username}
             onChangeText={username => setNewUsername(username)}
           />
         </View>
@@ -117,6 +118,8 @@ export default function EditProfile({route}) {
               marginBottom: 20,
             }),
             successMessage: 'Account deleted',
+            navigation,
+            navTo: 'HomeScreen',
             graphic: (
               <Text style={{fontWeight: 'bold', color: 'black'}}>
                 Delete Account
