@@ -1,5 +1,6 @@
 import DisplayItem from "./displayItem";
 import React from 'react'
+import DisplayItemComponent from "../components/displayItemComponent";
 
 class geocache implements DisplayItem {
     name: string;
@@ -18,8 +19,12 @@ class geocache implements DisplayItem {
     }
 
     renderItem = () => {
-        //return name, location, avatar
-        return <><h4>{this.name}{this.location}{this.avatar}</h4> </>
+        return <>
+            <DisplayItemComponent
+                name={this.name}
+                location={this.location}
+                avatar={this.avatar}/>
+        </>
     };
 }
 

@@ -1,19 +1,26 @@
+import React from 'react';
+import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {useAuth} from '../providers/AuthProvider';
+import GeocachingService from '../services/GeocachingService';
+
 export default function Geocaching(){
   const navigation = useNavigation();
   const {user} = useAuth();
   const userLocation = 100; //hard coding for now
+  const distance = 200; //hard coding for now
   service = new GeocachingService();
   return (
       <View style={styles.body}>
           <View style={styles.viewStyle}>
-              {/* <TouchableOpacity onPress={navigation.goBack}>
+              <TouchableOpacity onPress={navigation.goBack}>
                   <Image
                       source={require('../../data/images/back.png')}
                       style={{width: 35, height: 35, marginLeft: 2}}
                   />
-              </TouchableOpacity> */}
+              </TouchableOpacity>
               <Text style={styles.textStyle}>Geocaching</Text>
-              {service.renderItems(userLocation)}
+              {service.renderItems(userLocation, distance)}
           </View>
       </View>
       //need to add slider for simulating user location (https://reactnativeelements.com/docs/2.3.2/slider)

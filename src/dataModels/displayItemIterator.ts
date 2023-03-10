@@ -9,9 +9,9 @@ class displayItemsIterator implements ItemIterator {
         this.items = items;
     }
 
-    getNext(from: number){
+    getNext(curUserLocation:number, distance:number){
         // return this.items[this.index++];
-        if(this.items[this.index].location < from){
+        if(Math.abs(this.items[this.index].location - curUserLocation) <= distance){
           return  this.index++;
         }
     }

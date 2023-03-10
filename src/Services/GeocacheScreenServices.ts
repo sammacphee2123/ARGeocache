@@ -22,9 +22,9 @@ class GeocacheScreenServices {
     }
 
 
-    renderItems(userLocation: number){
+    renderItems(userLocation: number, distance: number){
         while(this.iterator.hasMore()){
-            this.iterator.getNext(userLocation).renderItem();
+            this.iterator.getNext(userLocation,distance).renderItem();
         }
     }
 }

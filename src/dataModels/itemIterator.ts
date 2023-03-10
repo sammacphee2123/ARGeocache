@@ -1,5 +1,5 @@
 interface ItemIterator{
-    getNext(from:number);
+    getNext(curUserLocation:number, distance:number);
     hasMore(): boolean;
 }
 
