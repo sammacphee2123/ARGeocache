@@ -1,13 +1,14 @@
 import {Alert} from 'react-native';
 import Button from './Button';
+import ButtonStyle from './button-styles/ButtonStyle';
 
 export default class NavigationButton extends Button {
   constructor(
-    action,
-    navigation,
-    navigateOnSuccess,
-    successMessage,
-    buttonStyle,
+    action: Function,
+    navigation: any,
+    navigateOnSuccess: String,
+    successMessage: String | null,
+    buttonStyle: ButtonStyle,
   ) {
     super(async () => {
       if (action) {

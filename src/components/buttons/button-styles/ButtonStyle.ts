@@ -1,14 +1,17 @@
 export default class ButtonStyle {
-  constructor(style, graphic) {
+  _style: Object
+  _graphic: JSX.Element
+
+  constructor(style: Object, graphic: JSX.Element) {
     this._style = style;
     this._graphic = graphic;
   }
 
-  get style() {
+  get style(): Object {
     return this._style;
   }
 
-  get graphic() {
+  get graphic(): JSX.Element {
     return this._graphic;
   }
 }

@@ -1,8 +1,13 @@
 import {Alert} from 'react-native';
 import Button from './Button';
+import ButtonStyle from './button-styles/ButtonStyle';
 
 export default class ActionButton extends Button {
-  constructor(action, successMessage, buttonStyle) {
+  constructor(
+    action: Function,
+    successMessage: String,
+    buttonStyle: ButtonStyle,
+  ) {
     super(async () => {
       const errorMessage = await action();
       if (errorMessage) {

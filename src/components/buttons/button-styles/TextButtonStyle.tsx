@@ -3,7 +3,7 @@ import {Text} from 'react-native';
 import ButtonStyle from './ButtonStyle';
 
 export default class TextButtonStyle extends ButtonStyle {
-  constructor(text) {
+  constructor(text: String) {
     super(
       {
         padding: 10,

@@ -3,7 +3,7 @@ import {Text} from 'react-native';
 import ButtonStyle from './ButtonStyle';
 
 export default class CenterButtonStyle extends ButtonStyle {
-  constructor(text, backgroundColor = '#2AAA8A', fontSize = 18, width = 180) {
+  constructor(text: String, backgroundColor: String = '#2AAA8A', fontSize: number = 18, width: number = 180) {
     super(
       {
         width,

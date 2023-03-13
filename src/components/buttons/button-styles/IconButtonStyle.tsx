@@ -3,7 +3,7 @@ import {Image, Text} from 'react-native';
 import ButtonStyle from './ButtonStyle';
 
 export default class IconButtonStyle extends ButtonStyle {
-  constructor(image, text, iconSize = 40) {
+  constructor(image: String, text: String | null, iconSize: number = 40) {
     super(
       {...{alignItems: 'center'}},
       <>
