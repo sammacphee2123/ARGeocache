@@ -37,18 +37,18 @@ const AuthProvider = ({children}) => {
     const creds = Realm.Credentials.emailPassword(email, password);
     const newUser = await app.logIn(creds);
     setUser(newUser);
+    return newUser != null;
   };
 
-  const signUp = async (email, password) => {
+  const signUp = async (email, password) =>
     await app.emailPasswordAuth.registerUser({email, password});
-  };
 
   const signOut = async () => {
     if (user == null) {
       console.warn("Not logged in, can't log out!");
       return;
     }
-    user.logOut();
+    await user.logOut();
     setUser(null);
   };
 

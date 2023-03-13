@@ -1,81 +1,67 @@
 import React from 'react';
 import {useAuth} from '../providers/AuthProvider.js';
-import {Alert} from 'react-native';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import ButtonFactory from '../components/buttons/ButtonFactory.js';
+import IconButtonStyle from '../components/buttons/button-styles/IconButtonStyle.js';
+import TextButtonStyle from '../components/buttons/button-styles/TextButtonStyle.js';
 
-export default function MainMenu({route}) {
+export default function MainMenu() {
   const navigation = useNavigation();
-  const {username} = route.params;
   const {signOut} = useAuth();
+  const buttonFactory = new ButtonFactory();
   const onPressSignOut = async () => {
-    console.log('Press sign out');
-    console.log(username);
     try {
       await signOut();
-      navigation.navigate('HomeScreen');
     } catch (error) {
-      console.log('Failed to sign out');
-      Alert.alert(`Failed to sign in: ${error.message}`);
+      return `Failed to sign out: ${error.message}`;
     }
   };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffff'}}>
       <View style={styles.viewStyle}>
-        <TouchableOpacity onPress={onPressSignOut}>
-          <Text style={{fontWeight: 'bold', color: 'black'}}>Logout</Text>
-        </TouchableOpacity>
+        {
+          buttonFactory.createButton({
+            action: onPressSignOut,
+            navigation,
+            navTo: 'HomeScreen',
+            buttonStyle: new TextButtonStyle('Logout'),
+          }).component
+        }
         <Text style={styles.textStyle}>Welcome</Text>
       </View>
-
-      <View style={styles.CameraContainer}>
-        <Image
-          source={require('../../data/images/WelcomeIcon.png')}
-          style={{
-            height: 225,
-            width: 225,
-            resizeMode: 'contain',
-          }}
-        />
-      </View>
+      <View style={styles.CameraContainer}></View>
       <View style={styles.ProfileContainer}>
-        <TouchableOpacity
-          style={styles.ProfileStyle}
-          activeOpacity={0.5}
-          onPress={() => navigation.navigate('Profile', {username})}>
-          <Image
-            source={require('../../data/images/Profile.png')}
-            style={styles.ImageIconStyle}
-          />
-          <Text style={{fontWeight: 'bold', color: 'black'}}>Profile</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.MapStyle}
-          activeOpacity={0.5}
-          onPress={() => navigation.navigate('Geocaching', {username})}>
-          <Image
-            source={require('../../data/images/Map.png')}
-            style={styles.ImageIconStyle}
-          />
-          <Text style={{fontWeight: 'bold', color: 'black'}}>Map</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.SearchStyle} activeOpacity={0.5}>
-          <Image
-            source={require('../../data/images/Search.png')}
-            style={styles.ImageIconStyle}
-          />
-          <Text style={{fontWeight: 'bold', color: 'black'}}>Search</Text>
-        </TouchableOpacity>
+        {
+          buttonFactory.createButton({
+            navigation,
+            navTo: 'Profile',
+            buttonStyle: new IconButtonStyle(
+              require('./../../data/images/Profile.png'),
+              'Profile',
+            ),
+          }).component
+        }
+        {
+          buttonFactory.createButton({
+            navigation,
+            navTo: 'Geocaching',
+            buttonStyle: new IconButtonStyle(
+              require('./../../data/images/Map.png'),
+              'Map',
+            ),
+          }).component
+        }
+        {
+          buttonFactory.createButton({
+            message: 'Search Pressed',
+            buttonStyle: new IconButtonStyle(
+              require('./../../data/images/Search.png'),
+              'Search',
+            ),
+          }).component
+        }
       </View>
     </SafeAreaView>
   );
@@ -88,7 +74,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 70,
   },
-
   ProfileContainer: {
     flex: 0.5,
     flexDirection: 'row',
@@ -97,16 +82,6 @@ const styles = StyleSheet.create({
     marginTop: 350,
     justifyContent: 'space-between',
   },
-
-  ImageIconStyle: {
-    flex: 1,
-    padding: 15,
-    margin: 5,
-    height: 25,
-    width: 25,
-    resizeMode: 'stretch',
-  },
-
   textStyle: {
     fontSize: 25,
     fontWeight: '800',

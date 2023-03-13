@@ -1,43 +1,30 @@
 import React, {useState} from 'react';
 import {useAuth} from '../providers/AuthProvider.js';
-import {Alert} from 'react-native';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import ButtonFactory from '../components/buttons/ButtonFactory.js';
+import CenterButtonStyle from '../components/buttons/button-styles/CenterButtonStyle.js';
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const {signIn} = useAuth();
   const navigation = useNavigation();
+  const buttonFactory = new ButtonFactory();
 
   const onPressSignIn = async () => {
-    console.log('Press sign in');
     try {
-      await signIn(username, password);
-      navigation.navigate('MainMenu', {username: username});
+      const success = await signIn(username, password);
+      if (!success) return 'Failed to sign in. Please try again later';
     } catch (error) {
-      console.log('Failed to sign in');
-      Alert.alert(`Failed to sign in: ${error.message}`);
+      return `Failed to sign in: ${error.message}`;
     }
   };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffff'}}>
       <View style={styles.viewStyle}>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <Image
-            source={require('../../data/images/back.png')}
-            style={{width: 35, height: 35, marginLeft: 2}}
-          />
-        </TouchableOpacity>
+        {buttonFactory.createButton({navigation, navTo: -1}).component}
         <Text style={styles.textStyle}>Login To Continue</Text>
       </View>
       <View style={styles.container}>
@@ -49,7 +36,6 @@ export default function Login() {
             onChangeText={username => setUsername(username)}
           />
         </View>
-
         <View style={styles.inputView}>
           <TextInput
             style={styles.TextInput}
@@ -59,10 +45,14 @@ export default function Login() {
             onChangeText={password => setPassword(password)}
           />
         </View>
-
-        <TouchableOpacity style={styles.SubmitButton} onPress={onPressSignIn}>
-          <Text style={{fontWeight: 'bold', color: 'black'}}>Enter</Text>
-        </TouchableOpacity>
+        {
+          buttonFactory.createButton({
+            action: onPressSignIn,
+            navigation,
+            navTo: 'MainMenu',
+            buttonStyle: new CenterButtonStyle('Enter'),
+          }).component
+        }
       </View>
     </SafeAreaView>
   );
@@ -87,14 +77,6 @@ const styles = StyleSheet.create({
     height: 50,
     flex: 1,
     padding: 10,
-  },
-
-  SubmitButton: {
-    width: '40%',
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#2AAA8A',
   },
   textStyle: {
     fontSize: 25,

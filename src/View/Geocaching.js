@@ -5,27 +5,21 @@ import Geolocation from '@react-native-community/geolocation';
 import {useNavigation} from '@react-navigation/native';
 import {useAuth} from '../providers/AuthProvider';
 import {Alert} from 'react-native';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  LogBox,
-  PermissionsAndroid,
-} from 'react-native';
+import {View, Text, StyleSheet, LogBox, PermissionsAndroid} from 'react-native';
+import ButtonFactory from '../components/buttons/ButtonFactory';
+import CenterButtonStyle from '../components/buttons/button-styles/CenterButtonStyle';
 
-export default function Geocaching({route}) {
+export default function Geocaching() {
   LogBox.ignoreAllLogs();
   const navigation = useNavigation();
   const {user} = useAuth();
-  const {username} = route.params;
   const [currentLongitude, setCurrentLongitude] = useState(-66.64159932959872);
   const [currentLatitude, setCurrentLatitude] = useState(45.94995093187056);
   const [locationStatus, setLocationStatus] = useState('');
   const [geocacheList, setGeocacheList] = useState([]);
   const [geocacheID, setGeocacheID] = useState('');
   let watchID = null;
+  const buttonFactory = new ButtonFactory();
   useEffect(() => {
     const requestLocationPermission = async () => {
       try {
@@ -67,9 +61,8 @@ export default function Geocaching({route}) {
       //if(Math.sqrt(Math.pow(currentLatitude-geoLat ,2) +Math.pow(currentLongitude-geoLong,2) ) <= 0.001){
       try {
         console.log('picking up geocache');
-        console.log(username);
         console.log(geocacheID);
-        await user.functions.pickUpGeocache(username, geocacheID);
+        await user.functions.pickUpGeocache(user.profile.email, geocacheID);
         await user.functions.updateGeocache(geocacheID, 0, 0);
         Alert.alert('Geocache collected!');
       } catch (err) {
@@ -121,12 +114,7 @@ export default function Geocaching({route}) {
   return (
     <View style={styles.body}>
       <View style={styles.viewStyle}>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <Image
-            source={require('../../data/images/back.png')}
-            style={{width: 35, height: 35, marginLeft: 2}}
-          />
-        </TouchableOpacity>
+        {buttonFactory.createButton({navigation, navTo: -1}).component}
         <Text style={styles.textStyle}>Geocaching</Text>
       </View>
       <MapView
@@ -156,11 +144,17 @@ export default function Geocaching({route}) {
         })}
       </MapView>
       <View style={styles.buttonCallout}>
-        <TouchableOpacity
-          style={[styles.touchable]}
-          onPress={() => console.log('press')}>
-          <Text style={styles.touchableText}>Place Geocache</Text>
-        </TouchableOpacity>
+        {
+          buttonFactory.createButton({
+            message: 'Geocache placed',
+            buttonStyle: new CenterButtonStyle(
+              'Place Geocache',
+              'lightblue',
+              24,
+              200,
+            ),
+          }).component
+        }
       </View>
     </View>
   );
@@ -183,31 +177,15 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  ImageIconStyle: {
-    flex: 1,
-    padding: 15,
-    margin: 5,
-    height: 25,
-    width: 25,
-    resizeMode: 'stretch',
-  },
   buttonCallout: {
-    flex: 1,
-    flexDirection: 'row',
+    height: 75,
+    width: 235,
     position: 'absolute',
     bottom: 10,
-    alignSelf: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: 'transparent',
-    borderWidth: 0.5,
+    borderWidth: 1,
     borderRadius: 20,
-  },
-  touchable: {
-    backgroundColor: 'lightblue',
-    padding: 10,
-    margin: 10,
-  },
-  touchableText: {
-    fontSize: 24,
   },
 });

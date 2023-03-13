@@ -1,45 +1,36 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  Image,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, Image, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import ButtonFactory from '../components/buttons/ButtonFactory';
+import IconButtonStyle from '../components/buttons/button-styles/IconButtonStyle';
 
-export default function Profile({route}) {
+export default function Profile() {
   const navigation = useNavigation();
-  const {username} = route.params;
+  const buttonFactory = new ButtonFactory();
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffff'}}>
       <View style={styles.viewStyle}>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <Image
-            source={require('../../data/images/back.png')}
-            style={{width: 35, height: 35, marginLeft: 2}}
-          />
-        </TouchableOpacity>
+        {buttonFactory.createButton({navigation, navTo: -1}).component}
         <Text style={styles.textStyle}>User Profile</Text>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('EditProfile', {username})}>
-          <Image
-            source={require('../../data/images/edit.png')}
-            style={{flex: 0.8, marginRight: 10}}
-          />
-        </TouchableOpacity>
+        {
+          buttonFactory.createButton({
+            navigation,
+            navTo: 'EditProfile',
+            buttonStyle: new IconButtonStyle(
+              require('./../../data/images/edit.png'),
+            ),
+          }).component
+        }
       </View>
-
       <View style={styles.container}>
-        <Image source={require('../../data/images/CameraButton.png')} />
+        <Image source={require('./../../data/images/CameraButton.png')} />
       </View>
       <View style={{alignItems: 'center', marginTop: 20}}>
         <Text style={{fontWeight: '600', color: 'black', fontSize: 16}}>
           Beginner Level | Joined: 2021
         </Text>
       </View>
-
       <View style={{alignItems: 'flex-start', marginLeft: 20, marginTop: 20}}>
         <Text style={{fontWeight: 'bold', color: 'black', fontSize: 16}}>
           Rewards
@@ -61,7 +52,6 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: '#04120f',
     flex: 2,
-    marginLeft: 25,
   },
   viewStyle: {
     backgroundColor: '#29b89e',

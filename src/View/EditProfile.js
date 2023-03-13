@@ -1,72 +1,62 @@
 import React, {useState} from 'react';
 import {useAuth} from '../providers/AuthProvider';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  View,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import CheckBox from '@react-native-community/checkbox';
+import ButtonFactory from '../components/buttons/ButtonFactory';
+import IconButtonStyle from '../components/buttons/button-styles/IconButtonStyle';
+import CenterButtonStyle from '../components/buttons/button-styles/CenterButtonStyle';
 
-export default function EditProfile({route}) {
-  const [username, setNewUsername] = useState(route.params.username);
+export default function EditProfile() {
+  const {user} = useAuth();
+  const [username, setNewUsername] = useState(user.profile.email);
   const [password, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isSelected, setSelection] = useState(false);
   const navigation = useNavigation();
-  const {user} = useAuth();
+  const buttonFactory = new ButtonFactory();
 
   const onPressUpdateProfile = async () => {
+    if (password !== confirmPassword)
+      return 'Passwords do not match, please try again';
+    if (password.length < 8)
+      return 'Password must be at least 8 characters long';
+
     try {
-      if (password === confirmPassword) {
-        if (password.length > 7) {
-          await user.functions.updateProfile(username, password, isSelected);
-          navigation.navigate('MainMenu', {username: route.params.username});
-          alert('Profile successfully updated');
-        } else {
-          Alert.alert('Password must be at least 8 characters long');
-        }
-      } else {
-        Alert.alert('Passwords do not match, please try again');
-      }
+      await user.functions.updateProfile(username, password, isSelected);
     } catch (error) {
-      Alert.alert(`Failed to sign up: ${error.message}`);
+      return `Failed to sign up: ${error.message}`;
     }
   };
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffff'}}>
       <View style={styles.viewStyle}>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <Image
-            source={require('../../data/images/back.png')}
-            style={{width: 35, height: 35, marginLeft: 2}}
-          />
-        </TouchableOpacity>
+        {buttonFactory.createButton({navigation, navTo: -1}).component}
         <Text style={styles.textStyle}>Edit Profile</Text>
       </View>
       <View style={styles.container}>
-        <TouchableOpacity
-          onPress={() => {
-            alert('Open Camera');
-          }}>
-          <Image source={require('../../data/images/CameraButton.png')} />
-        </TouchableOpacity>
+        {
+          buttonFactory.createButton({
+            message: 'Open Camera',
+            buttonStyle: new IconButtonStyle(
+              require('./../../data/images/CameraButton.png'),
+              null,
+              250,
+            ),
+          }).component
+        }
       </View>
-
       <View style={styles.container}>
         <View style={styles.inputView}>
           <TextInput
             style={styles.TextInput}
             placeholder="New Username"
             placeholderTextColor="#003f5c"
+            value={username}
             onChangeText={username => setNewUsername(username)}
           />
         </View>
-
         <View style={styles.inputView}>
           <TextInput
             style={styles.TextInput}
@@ -76,7 +66,6 @@ export default function EditProfile({route}) {
             onChangeText={password => setNewPassword(password)}
           />
         </View>
-
         <View style={styles.inputView}>
           <TextInput
             style={styles.TextInput}
@@ -88,7 +77,6 @@ export default function EditProfile({route}) {
             }
           />
         </View>
-
         <View style={styles.checkboxContainer}>
           <Text style={styles.label}>
             Would you like your account to be private?
@@ -99,24 +87,23 @@ export default function EditProfile({route}) {
             style={styles.checkbox}
           />
         </View>
-
-        <TouchableOpacity
-          style={styles.SaveButton}
-          onPress={() => {
-            onPressUpdateProfile();
-            alert('Changes Saved');
-          }}>
-          <Text style={{fontWeight: 'bold', color: 'black'}}>Save</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.DeleteButton}
-          onPress={() => {
-            alert('Changes Saved');
-          }}>
-          <Text style={{fontWeight: 'bold', color: 'black'}}>
-            Delete Account
-          </Text>
-        </TouchableOpacity>
+        {
+          buttonFactory.createButton({
+            action: onPressUpdateProfile,
+            message: 'Changes Saved',
+            navigation,
+            navTo: 'MainMenu',
+            buttonStyle: new CenterButtonStyle('Save'),
+          }).component
+        }
+        {
+          buttonFactory.createButton({
+            message: 'Account deleted',
+            navigation,
+            navTo: 'HomeScreen',
+            buttonStyle: new CenterButtonStyle('Delete Account', '#cc0000'),
+          }).component
+        }
       </View>
     </SafeAreaView>
   );
@@ -126,37 +113,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    marginTop: 30,
+    justifyContent: 'space-evenly',
   },
   inputView: {
     backgroundColor: '#96DED1',
     width: '70%',
     height: 45,
-    marginBottom: 20,
     alignItems: 'flex-start',
   },
-
   TextInput: {
     height: 50,
     flex: 1,
     padding: 10,
-  },
-
-  SaveButton: {
-    width: '40%',
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#2AAA8A',
-    marginBottom: 20,
-  },
-  DeleteButton: {
-    width: '40%',
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#cc0000',
-    marginBottom: 20,
   },
   textStyle: {
     fontSize: 25,
@@ -175,7 +143,6 @@ const styles = StyleSheet.create({
   },
   checkboxContainer: {
     flexDirection: 'column',
-    marginBottom: 20,
   },
   checkbox: {
     alignSelf: 'center',

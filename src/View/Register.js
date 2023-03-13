@@ -1,16 +1,9 @@
 import React, {useState} from 'react';
 import {useAuth} from '../providers/AuthProvider';
-import {Alert} from 'react-native';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
-  Image,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import ButtonFactory from '../components/buttons/ButtonFactory';
+import CenterButtonStyle from '../components/buttons/button-styles/CenterButtonStyle';
 
 export default function Register() {
   const [username, setUsername] = useState('');
@@ -18,40 +11,30 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const navigation = useNavigation();
-  const {user, signUp, signIn} = useAuth();
+  const {signUp, signIn} = useAuth();
+  const buttonFactory = new ButtonFactory();
 
   const onPressSignUp = async () => {
+    if (password !== confirmPassword)
+      return 'Passwords do not match, please try again';
+    if (password.length < 8)
+      return 'Password must be at least 8 characters long';
+
     try {
-      if (password === confirmPassword) {
-        if (password.length > 7) {
-          await signUp(username, password);
-          signIn(username, password);
-          await user.functions.insertUser(username, password);
-          navigation.navigate('MainMenu');
-          alert('New Profile Created, you are now signed in');
-        } else {
-          Alert.alert('Password must be at least 8 characters long');
-        }
-      } else {
-        Alert.alert('Passwords do not match, please try again');
-      }
+      await signUp(username, password);
+      if (!(await signIn(username, password)))
+        return 'User was not able to be signed in';
     } catch (error) {
-      Alert.alert(`Failed to sign up: ${error.message}`);
+      return `Failed to sign up: ${error.message}`;
     }
   };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffff'}}>
       <View style={styles.viewStyle}>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <Image
-            source={require('../../data/images/back.png')}
-            style={{width: 35, height: 35, marginLeft: 2}}
-          />
-        </TouchableOpacity>
+        {buttonFactory.createButton({navigation, navTo: -1}).component}
         <Text style={styles.textStyle}>Create Your Profile</Text>
       </View>
-
       <View style={styles.container}>
         <View style={styles.inputView}>
           <TextInput
@@ -61,7 +44,6 @@ export default function Register() {
             onChangeText={username => setUsername(username)}
           />
         </View>
-
         <View style={styles.inputView}>
           <TextInput
             style={styles.TextInput}
@@ -71,7 +53,6 @@ export default function Register() {
             onChangeText={password => setPassword(password)}
           />
         </View>
-
         <View style={styles.inputView}>
           <TextInput
             style={styles.TextInput}
@@ -83,10 +64,15 @@ export default function Register() {
             }
           />
         </View>
-
-        <TouchableOpacity style={styles.SubmitButton} onPress={onPressSignUp}>
-          <Text style={{fontWeight: 'bold', color: 'black'}}>Submit</Text>
-        </TouchableOpacity>
+        {
+          buttonFactory.createButton({
+            action: onPressSignUp,
+            message: 'New Profile Created, you are now signed in',
+            navigation,
+            navTo: 'MainMenu',
+            buttonStyle: new CenterButtonStyle('Submit'),
+          }).component
+        }
       </View>
     </SafeAreaView>
   );
@@ -106,19 +92,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignItems: 'flex-start',
   },
-
   TextInput: {
     height: 50,
     flex: 1,
     padding: 10,
-  },
-
-  SubmitButton: {
-    width: '40%',
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#2AAA8A',
   },
   textStyle: {
     fontSize: 25,
