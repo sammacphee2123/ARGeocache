@@ -17,6 +17,18 @@ class otherUser implements DisplayItem {
     clone(){
         return new otherUser(this.name, this.location, this.avatar);
     }
+    
+    setName(name: string){
+        this.name = name;
+    }
+
+    setLocation(location: number){
+        this.location = location;
+    }
+
+    setAvatar(avatar: string){
+        this.avatar = avatar;
+    }
 
     renderItem = () => {
         return <>

@@ -17,6 +17,18 @@ class geocache implements DisplayItem {
     clone(){
         return new geocache(this.name, this.location, this.avatar);
     }
+    
+    setName(name: string){
+        this.name = name;
+    }
+
+    setLocation(location: number){
+        this.location = location;
+    }
+
+    setAvatar(avatar: string){
+        this.avatar = avatar;
+    }
 
     renderItem = () => {
         return <>
