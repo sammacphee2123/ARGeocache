@@ -1,3 +1,78 @@
+// import React from 'react';
+// import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+// import {useNavigation} from '@react-navigation/native';
+// import {useAuth} from '../providers/AuthProvider';
+// import GeocachingService from '../services/GeocachingService';
+
+// export default function Geocaching(){
+//   const navigation = useNavigation();
+//   const {user} = useAuth();
+//   const userLocation = 100; //hard coding for now
+//   const distance = 200; //hard coding for now
+//   service = new GeocachingService();
+//   return (
+//       <View style={styles.body}>
+//           <View style={styles.viewStyle}>
+//               <TouchableOpacity onPress={navigation.goBack}>
+//                   <Image
+//                       source={require('../../data/images/back.png')}
+//                       style={{width: 35, height: 35, marginLeft: 2}}
+//                   />
+//               </TouchableOpacity>
+//               <Text style={styles.textStyle}>Geocaching</Text>
+//               {service.renderItems(userLocation, distance)}
+//           </View>
+//       </View>
+//       //need to add slider for simulating user location (https://reactnativeelements.com/docs/2.3.2/slider)
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   body: {
+//     flex: 1,
+//     alignItems: 'center',
+//   },
+//   viewStyle: {
+//     backgroundColor: '#29b89e',
+//     width: '100%',
+//     height: 50,
+//     justifyContent: 'flex-start',
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//   },
+//   map: {
+//     width: '100%',
+//     height: '100%',
+//   },
+//   ImageIconStyle: {
+//     flex: 1,
+//     padding: 15,
+//     margin: 5,
+//     height: 25,
+//     width: 25,
+//     resizeMode: 'stretch',
+//   },
+//   buttonCallout: {
+//     flex: 1,
+//     flexDirection: 'row',
+//     position: 'absolute',
+//     bottom: 10,
+//     alignSelf: 'center',
+//     justifyContent: 'space-between',
+//     backgroundColor: 'transparent',
+//     borderWidth: 0.5,
+//     borderRadius: 20,
+//   },
+//   touchable: {
+//     backgroundColor: 'lightblue',
+//     padding: 10,
+//     margin: 10,
+//   },
+//   touchableText: {
+//     fontSize: 24,
+//   },
+// });
+
 import React, {useState, useEffect} from 'react';
 import MapView from 'react-native-maps';
 import {Marker} from 'react-native-maps';
